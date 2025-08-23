@@ -1,186 +1,58 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
 
-// We now define the card data directly inside this file
-const cardData = [
-  {
-    id: 1,
-    content: (
-      <div className="flex flex-col md:flex-row items-center gap-8 w-full">
-        <div className="flex-1 text-left">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Real-time 3D virtual tours with interactive hotspots
-          </h3>
-          <p className="text-gray-300 mb-6">
-            Experience unmatched realism and precision with our comprehensive 3D
-            360 VR tours, delivering an intuitive and immersive journey.
-          </p>
-          <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform">
-            Know More
-          </button>
-        </div>
-        <div className="flex-1">
-          <img
-            src="/images/cards/tour-3d.png"
-            alt="3D Tour"
-            className="rounded-xl shadow-lg w-full"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 2,
-    content: (
-      <div className="flex flex-col md:flex-row items-center gap-8 w-full">
-        <div className="flex-1 text-left">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Digitised location mapping
-          </h3>
-          <p className="text-gray-300 mb-6">
-            Quickly view nearby schools, parks, and transport links. Our mapping
-            provides a clear, interactive snapshot of the neighbourhood.
-          </p>
-          <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform">
-            Know More
-          </button>
-        </div>
-        <div className="flex-1">
-          <img
-            src="/images/cards/location-mapping.png"
-            alt="Location Mapping"
-            className="rounded-xl shadow-lg w-full"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 3,
-    content: (
-      <div className="flex flex-col md:flex-row items-center gap-8 w-full">
-        <div className="flex-1 text-left">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Hyperreal customisation
-          </h3>
-          <p className="text-gray-300 mb-6">
-            Bring your vision to life. Alter materials, furniture, and décor in a
-            highly immersive 3D space to visualise your dream home.
-          </p>
-          <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform">
-            Know More
-          </button>
-        </div>
-        <div className="flex-1">
-          <img
-            src="/images/cards/customisation.png"
-            alt="Customisation"
-            className="rounded-xl shadow-lg w-full"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 4,
-    content: (
-      <div className="flex flex-col md:flex-row items-center gap-8 w-full">
-        <div className="flex-1 text-left">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Personalised apartment walkthrough
-          </h3>
-          <p className="text-gray-300 mb-6">
-            Experience an immersive 3D walkthrough of property layouts, room
-            details, and balcony views, allowing buyers to make confident decisions.
-          </p>
-          <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform">
-            Know More
-          </button>
-        </div>
-        <div className="flex-1">
-          <img
-            src="/images/cards/walkthrough.png"
-            alt="Walkthrough"
-            className="rounded-xl shadow-lg w-full"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 5,
-    content: (
-      <div className="flex flex-col md:flex-row items-center gap-8 w-full">
-        <div className="flex-1 text-left">
-          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Real-time inventory management
-          </h3>
-          <p className="text-gray-300 mb-6">
-            Search and filter available units effortlessly. Real-time inventory
-            integration keeps listings updated, streamlining the sales process.
-          </p>
-          <button className="px-6 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform">
-            Know More
-          </button>
-        </div>
-        <div className="flex-1">
-          <img
-            src="/images/cards/inventory.png"
-            alt="Inventory Management"
-            className="rounded-xl shadow-lg w-full"
-          />
-        </div>
-      </div>
-    ),
-  },
+import { useEffect, useRef, useState } from "react";
+
+const defaultBackgrounds = [
+  "/images/cards/card1.jpg",
+  "/images/cards/card2.jpg",
+  "/images/cards/card3.jpg",
 ];
 
-
 const ScrollStack = ({
+  cards,
+  backgroundColor = "bg-background",
+  cardHeight = "60vh",
   animationDuration = "0.5s",
   sectionHeightMultiplier = 3,
   intersectionThreshold = 0.1,
   className = "",
 }) => {
+  const scrollableSectionRef = useRef(null);
   const sectionRef = useRef(null);
   const cardsContainerRef = useRef(null);
+
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const ticking = useRef(false);
 
-  const cardCount = cardData.length;
+  const cardCount = Math.min(cards.length, 5);
 
   const cardStyle = {
+    height: cardHeight,
+    maxHeight: "500px",
     borderRadius: "20px",
-    width: "100%",
-    maxWidth: "1000px",
     transition: `transform ${animationDuration} cubic-bezier(0.19, 1, 0.22, 1), opacity ${animationDuration} cubic-bezier(0.19, 1, 0.22, 1)`,
     willChange: "transform, opacity",
-    overflow: "hidden",
-    backgroundColor: 'rgba(30, 30, 30, 0.7)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    padding: '2.5rem',
   };
 
+  // Intersection observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setIsIntersecting(entry.isIntersecting),
       { threshold: intersectionThreshold }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleScroll = () => {
       if (!ticking.current) {
         requestAnimationFrame(() => {
-          if (!sectionRef.current) return;
+          if (!sectionRef.current || !cardsContainerRef.current) return;
 
           const sectionRect = sectionRef.current.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          const sectionTop = sectionRect.top;
+          const parentRect = scrollableSectionRef.current?.getBoundingClientRect();
+          const viewportHeight = parentRect?.height ?? window.innerHeight;
+          const sectionTop = sectionRect.top - (parentRect?.top ?? 0);
           const sectionHeight = sectionRef.current.offsetHeight;
           const scrollableDistance = sectionHeight - viewportHeight;
 
@@ -191,85 +63,124 @@ const ScrollStack = ({
             progress = 1;
           }
 
-          let newActiveIndex = Math.floor(progress * cardCount);
-          setActiveCardIndex(Math.min(newActiveIndex, cardCount - 1));
+          let newActiveIndex = 0;
+          const progressPerCard = 1 / cardCount;
+          for (let i = 0; i < cardCount; i++) {
+            if (progress >= progressPerCard * (i + 1)) newActiveIndex = i + 1;
+          }
 
+          setActiveCardIndex(Math.min(newActiveIndex, cardCount - 1));
           ticking.current = false;
         });
         ticking.current = true;
       }
     };
 
-    const scrollEl = document.documentElement;
-    scrollEl.addEventListener("scroll", handleScroll, { passive: true });
+    const scrollElement = scrollableSectionRef.current;
+    scrollElement?.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => {
-      scrollEl.removeEventListener("scroll", handleScroll);
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      scrollElement?.removeEventListener("scroll", handleScroll);
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
     };
-  }, [cardCount, intersectionThreshold]);
+  }, [cardCount, sectionHeightMultiplier, intersectionThreshold]);
 
   const getCardTransform = (index) => {
-    const isVisible = isIntersecting && activeCardIndex === index;
-    const isStacked = isIntersecting && activeCardIndex > index;
-    
-    let scale = 1;
-    let translateY = "20px";
-    let opacity = 0;
+    const isVisible = isIntersecting && activeCardIndex >= index;
+    const scale = 0.9 + index * 0.05;
+    const translateY = isVisible ? `${90 - index * 30}px` : "100px";
 
-    if (isVisible) {
-      scale = 1;
-      translateY = "0px";
-      opacity = 1;
-    } else if (isStacked) {
-      scale = 1 - (activeCardIndex - index) * 0.05;
-      translateY = `-${(activeCardIndex - index) * 15}px`;
-      opacity = 1;
-    }
-    
     return {
-      transform: `translateX(-50%) translateY(-50%) translateY(${translateY}) scale(${scale})`,
-      opacity: opacity,
-      zIndex: 10 + index,
+      transform: `translateY(${translateY}) scale(${scale})`,
+      opacity: isVisible ? (index === 0 ? 0.9 : 1) : 0,
+      zIndex: 10 + index * 10,
       pointerEvents: isVisible ? "auto" : "none",
     };
   };
 
   return (
-    <div
-      ref={sectionRef}
-      className={`relative ${className}`}
-      style={{ height: `${sectionHeightMultiplier * 100}vh` }}
+    <section
+      ref={scrollableSectionRef}
+      className="relative max-h-screen w-full lg:w-full overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300"
     >
-      <div className="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden">
+      <div
+        ref={sectionRef}
+        className={`relative ${className}`}
+        style={{ height: `${sectionHeightMultiplier * 85}vh` }}
+      >
         <div
-          ref={cardsContainerRef}
-          className="relative w-full max-w-5xl h-auto"
+          className={`sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden ${backgroundColor}`}
         >
-          {cardData.map((card, index) => {
-            const cardTransform = getCardTransform(index);
-            return (
-              <div
-                key={card.id}
-                className="absolute top-1/2 left-1/2"
-                style={{
-                  ...cardStyle,
-                  transform: cardTransform.transform,
-                  opacity: cardTransform.opacity,
-                  zIndex: cardTransform.zIndex,
-                  pointerEvents: cardTransform.pointerEvents,
-                }}
-              >
-                {card.content}
-              </div>
-            );
-          })}
-        </div>
+          <div className="container px-6 lg:px-8 mx-auto h-full flex flex-col justify-center">
+            <div
+              ref={cardsContainerRef}
+              className="relative w-full max-w-5xl mx-auto flex-shrink-0"
+              style={{ height: cardHeight }}
+            >
+              {cards.slice(0, 5).map((card, index) => {
+                const cardTransform = getCardTransform(index);
+                const backgroundImage =
+                  card.backgroundImage || defaultBackgrounds[index % defaultBackgrounds.length];
+
+                return (
+                  <div
+                    key={index}
+                    className="absolute z-50 overflow-hidden shadow-xl transition-all duration-300"
+                    style={{
+                      ...cardStyle,
+    top: 0,
+    left: "50%",
+    transform: `translateX(-50%) ${cardTransform.transform}`,
+    width: "100%",
+    maxWidth: "100%",
+    opacity: cardTransform.opacity,
+    zIndex: cardTransform.zIndex,
+    pointerEvents: cardTransform.pointerEvents,
+    backgroundImage: `url('${backgroundImage}')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    borderRadius: "20px",
+                    }}
+                  >
+                    {/* Background */}
+                    <div
+                      className="absolute inset-0 z-0 bg-gradient-to-b from-black/40 to-black/80"
+                      style={{
+                        backgroundImage: `url('${backgroundImage}')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundBlendMode: "overlay",
+                      }}
+                    />
+                    {/* Badge */}
+                    {card.badge && (
+                      <div className="absolute top-4 right-4 z-20">
+      <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white">
+        <span className="text-sm font-medium">{card.badge}</span>
       </div>
     </div>
+  )}
+  <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
+    {card.content ? (
+      card.content
+    ) : (
+      <div className="max-w-lg">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
+          {card.title}
+        </h3>
+        {card.subtitle && <p className="text-lg text-white/80">{card.subtitle}</p>}
+      </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

@@ -12,7 +12,7 @@ export default function ContactUs() {
       className="h-screen flex flex-col"
     >
       {/* Top Section */}
-      <div className="flex-1 bg-gradient-to-b from-blue-600 to-black flex flex-col px-8 py-6">
+      <div className="flex-1 bg-gradient-to-b from-blue-600 flex flex-col px-8 py-6">
         {/* Logo Top-Left */}
         <div className="flex justify-start">
           <Image
