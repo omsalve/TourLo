@@ -41,7 +41,6 @@ export default function Hero() {
       <div className="absolute inset-0 z-0">
       <div className="relative w-full h-full bg-[radial-gradient(circle,rgba(255,255,255,0.25)_1px,transparent_1px)] [background-size:20px_20px] overflow-hidden">
   <div className="absolute inset-0 flex items-center justify-center">
-    
   </div>
 </div>
         </div>
@@ -127,6 +126,7 @@ export default function Hero() {
 
         {/* ScrollStack */}
         <section className="h-screen w-full flex snap-y snap-mandatory overflow-visible">
+          <div>
   <ScrollStack
     backgroundColor="bg-transparent"
     cards={[
@@ -281,6 +281,7 @@ export default function Hero() {
       },
     ]}
   />
+  </div>
 </section>
 
 
