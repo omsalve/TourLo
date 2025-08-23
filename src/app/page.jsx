@@ -12,6 +12,7 @@ import ScrollBrightText from "./components/RevealTex";
 import ScrollStack from "./components/lightswind/scroll-stack";
 import CTA from "./components/CTA";
 import Footer from './components/footer'
+import DottedGrid from "./components/DottedGrid";
 
 const bebas = Bebas_Neue({
   subsets: ["latin"],
@@ -38,8 +39,12 @@ export default function Hero() {
     <div className="relative w-full min-h-screen overflow-hidden scroll-smooth">
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0">
-        <div className="w-full h-full bg-[repeating-radial-gradient(circle,rgba(255,255,255,0.05)_0,rgba(255,255,255,0.05)_1px,transparent_1px,transparent_20px)] animate-dots"></div>
-      </div>
+      <div className="relative w-full h-full bg-[radial-gradient(circle,rgba(255,255,255,0.25)_1px,transparent_1px)] [background-size:20px_20px] overflow-hidden">
+  <div className="absolute inset-0 flex items-center justify-center">
+    
+  </div>
+</div>
+        </div>
       <div className="absolute inset-0 bg-black/60 z-0" />
 
       <div className="relative z-10">

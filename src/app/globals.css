@@ -31,3 +31,18 @@ h1 {
 font-weight: 700;
 }
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+@keyframes pulseDot {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+.animate-pulseDot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
