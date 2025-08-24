@@ -41,7 +41,7 @@ export default function Hero() {
         style={{ width: "100%", height: "100%", pointerEvents: "none" }}
       >
         {/* Same footprint; pointerEvents remain disabled to avoid intercepting UI clicks */}
-        <BackgroundRippleEffect rows={8} cols={27} cellSize={56} />
+        <BackgroundRippleEffect hoverfillAlpha={0.28} hoverBorderAlpha={0.6} hoverBrightness={1.8} rows={8} cols={27} cellSize={56} />
       </div>
 
       {/* Optional readability veil above the grid */}
