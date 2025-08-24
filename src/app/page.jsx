@@ -5,11 +5,12 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Montserrat } from "next/font/google";
-import DotGrid from "../../reactbitscomp/Backgrounds/DotGrid/DotGrid";
+// ⛔️ DotGrid removed
 import ScrollBrightText from "./components/RevealTex";
 import CTA from "./components/CTA";
 import Footer from "./components/footer";
 import GridWrapper from "./components/GridWrapper";
+import { BackgroundRippleEffect } from "@/cellgrid/ui/background-ripple-effect";
 
 // Client-only load to avoid SSR observer/scroll issues
 const ScrollStack = dynamic(
@@ -34,22 +35,13 @@ export default function Hero() {
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden scroll-smooth">
-      {/* GLOBAL BACKGROUND – DotGrid spans the whole site (header → footer) */}
+      {/* GLOBAL BACKGROUND – replaced DotGrid with BackgroundRippleEffect */}
       <div
         className="fixed inset-0 z-0 bg-black"
         style={{ width: "100%", height: "100%", pointerEvents: "none" }}
       >
-        <DotGrid
-          dotSize={4}
-          gap={15}
-          baseColor="#696969"      // dim gray
-          activeColor="#5227FF"    // keep as-is
-          proximity={120}
-          shockRadius={250}
-          shockStrength={10}
-          resistance={750}
-          returnDuration={1.5}
-        />
+        {/* Same footprint; pointerEvents remain disabled to avoid intercepting UI clicks */}
+        <BackgroundRippleEffect rows={8} cols={27} cellSize={56} />
       </div>
 
       {/* Optional readability veil above the grid */}

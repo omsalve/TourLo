@@ -13,15 +13,21 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"]      // allows: import {...} from "@/utils/cn"
+    },
+
+    "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "reactbitscomp/TextAnimations/ScrollReveal/ScrollStack.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
