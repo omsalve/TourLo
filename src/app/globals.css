@@ -46,3 +46,5 @@ font-weight: 700;
 .animate-pulseDot {
   animation: pulseDot 1.5s ease-in-out infinite;
 }
+
+@import "tailwindcss";

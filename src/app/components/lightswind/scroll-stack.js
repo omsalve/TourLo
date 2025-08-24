@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 const defaultBackgrounds = [
-  "/images/cards/card1.jpg",
-  "/images/cards/card2.jpg",
-  "/images/cards/card3.jpg",
+  "/images/bed.jpg",
+  "/images/bed.jpg",
+  "/images/bed.jpg",
 ];
 
 const ScrollStack = ({
@@ -25,7 +25,7 @@ const ScrollStack = ({
   const [isIntersecting, setIsIntersecting] = useState(false);
   const ticking = useRef(false);
 
-  const cardCount = Math.min(cards.length, 5);
+  const cardCount = Math.min((cards?.length ?? 0), 5);
 
   const cardStyle = {
     height: cardHeight,
@@ -64,12 +64,12 @@ const ScrollStack = ({
           }
 
           let newActiveIndex = 0;
-          const progressPerCard = 1 / cardCount;
+          const progressPerCard = cardCount ? 1 / cardCount : 1;
           for (let i = 0; i < cardCount; i++) {
             if (progress >= progressPerCard * (i + 1)) newActiveIndex = i + 1;
           }
 
-          setActiveCardIndex(Math.min(newActiveIndex, cardCount - 1));
+          setActiveCardIndex(Math.min(newActiveIndex, Math.max(cardCount - 1, 0)));
           ticking.current = false;
         });
         ticking.current = true;
@@ -88,12 +88,11 @@ const ScrollStack = ({
 
   const getCardTransform = (index) => {
     const isVisible = isIntersecting && activeCardIndex >= index;
-    const scale = 0.9 + index * 0.05;
     const translateY = isVisible ? `${90 - index * 30}px` : "100px";
-
+    // fixed size -> scale(1)
     return {
-      transform: `translateY(${translateY}) scale(${scale})`,
-      opacity: isVisible ? (index === 0 ? 0.9 : 1) : 0,
+      transform: `translateY(${translateY}) scale(1)`,
+      opacity: isVisible ? 1 : 0,
       zIndex: 10 + index * 10,
       pointerEvents: isVisible ? "auto" : "none",
     };
@@ -115,13 +114,14 @@ const ScrollStack = ({
           <div className="container px-6 lg:px-8 mx-auto h-full flex flex-col justify-center">
             <div
               ref={cardsContainerRef}
-              className="relative w-full max-w-5xl mx-auto flex-shrink-0"
+              className="relative w-full max-w-6xl mx-auto flex-shrink-0"
               style={{ height: cardHeight }}
             >
-              {cards.slice(0, 5).map((card, index) => {
+              {cards?.slice(0, 5).map((card, index) => {
                 const cardTransform = getCardTransform(index);
                 const backgroundImage =
-                  card.backgroundImage || defaultBackgrounds[index % defaultBackgrounds.length];
+                  card.backgroundImage ||
+                  defaultBackgrounds[index % defaultBackgrounds.length];
 
                 return (
                   <div
@@ -129,18 +129,18 @@ const ScrollStack = ({
                     className="absolute z-50 overflow-hidden shadow-xl transition-all duration-300"
                     style={{
                       ...cardStyle,
-    top: 0,
-    left: "50%",
-    transform: `translateX(-50%) ${cardTransform.transform}`,
-    width: "100%",
-    maxWidth: "100%",
-    opacity: cardTransform.opacity,
-    zIndex: cardTransform.zIndex,
-    pointerEvents: cardTransform.pointerEvents,
-    backgroundImage: `url('${backgroundImage}')`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    borderRadius: "20px",
+                      top: 0,
+                      left: "50%",
+                      transform: `translateX(-50%) ${cardTransform.transform}`,
+                      width: "100%",
+                      maxWidth: "72rem", // 6XL for all cards
+                      opacity: cardTransform.opacity,
+                      zIndex: cardTransform.zIndex,
+                      pointerEvents: cardTransform.pointerEvents,
+                      backgroundImage: `url('${backgroundImage}')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      borderRadius: "20px",
                     }}
                   >
                     {/* Background */}
@@ -156,21 +156,23 @@ const ScrollStack = ({
                     {/* Badge */}
                     {card.badge && (
                       <div className="absolute top-4 right-4 z-20">
-      <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white">
-        <span className="text-sm font-medium">{card.badge}</span>
-      </div>
-    </div>
-  )}
-  <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
-    {card.content ? (
-      card.content
-    ) : (
-      <div className="max-w-lg">
-        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
-          {card.title}
-        </h3>
-        {card.subtitle && <p className="text-lg text-white/80">{card.subtitle}</p>}
-      </div>
+                        <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white">
+                          <span className="text-sm font-medium">{card.badge}</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
+                      {card.content ? (
+                        card.content
+                      ) : (
+                        <div className="max-w-lg">
+                          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
+                            {card.title}
+                          </h3>
+                          {card.subtitle && (
+                            <p className="text-lg text-white/80">{card.subtitle}</p>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
