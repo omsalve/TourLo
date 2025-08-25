@@ -57,7 +57,7 @@ export default function CTA() {
 
       {/* Button → Goes to ContactUs page */}
       <Link href="/ContactUs">
-        <button className="bg-gradient-to-r from-purple-500 to-blue-500 px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+        <button className="bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform">
           BOOK A DEMO →
         </button>
       </Link>

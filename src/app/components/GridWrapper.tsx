@@ -16,21 +16,19 @@ export default function GridWrapper() {
   const handleTab = (idx: number) => setActive(idx);
 
   return (
-   <section className="relative mx-auto max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
-
+    <section className="relative mx-auto translate-y-[-200px] max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
       {/* Inner container */}
-      <div className="relative rounded-[26px] bg-black text-white overflow-hidden">
-        {/* Soft edge glows */}
-        <div className="pointer-events-none absolute bottom-[-6rem] left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-violet-500/20 blur-3xl" />
-
+      <div className="relative rounded-[26px] bg-black/80 text-white overflow-hidden">
         {/* Header copy */}
         <div className="px-6 sm:px-10 lg:px-16 pt-28 pb-16 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
             <span className="whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
-  Tour-Lo Third-Eye.
-</span>{" "}
+              Tour-Lo Third-Eye.
+            </span>{" "}
             <br className="hidden sm:block" />
-            <span className="text-5xl font-semibold tracking-normal">Nothing gets missed.</span>
+            <span className="text-5xl font-semibold tracking-normal">
+              Nothing gets missed.
+            </span>
           </h1>
 
           <p className="mx-auto mt-5 max-w-3xl text-sm sm:text-base text-white/70 leading-relaxed">
@@ -65,7 +63,7 @@ export default function GridWrapper() {
                 // while each slide still occupies 100% width for the transform math.
                 <div key={tab.label} className="w-full shrink-0 px-4 sm:px-6">
                   {/* Each slide is its OWN container/card */}
-                  <div className="rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+                  <div className="rounded-2xl overflow-hidden">
                     <video
                       src={tab.src}
                       autoPlay
@@ -93,15 +91,21 @@ export default function GridWrapper() {
                     type="button"
                     onClick={() => handleTab(idx)}
                     className={`relative font-medium ${
-                      isActive ? "text-white" : "text-white/60 hover:text-white transition"
+                      isActive
+                        ? "text-white"
+                        : "text-white/60 hover:text-white transition"
                     }`}
                   >
                     {tab.label}
                     {isActive && (
                       <motion.span
                         layoutId="tab-underline"
-                        className="absolute -bottom-2 left-0 right-0 h-[2px] rounded-full bg-[linear-gradient(90deg,#51b8ff,#8d66ff,#ff76af)]"
-                        transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                        className="absolute -bottom-2 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-cyan-500 to-cyan-300"
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 40,
+                        }}
                       />
                     )}
                   </button>
@@ -110,11 +114,12 @@ export default function GridWrapper() {
             </nav>
 
             <div className="mt-3 text-center max-w-2xl text-xs sm:text-sm text-white/65">
-              Writing Tools can proofread your text and rewrite different versions until the tone and wording are just right,
-              and summarize selected text with a click.
+              Writing Tools can proofread your text and rewrite different
+              versions until the tone and wording are just right, and
+              summarize selected text with a click.
             </div>
 
-            <div className="mt-4 h-[2px] w-32 rounded-full bg-[linear-gradient(90deg,#51b8ff,#8d66ff,#ff76af)]" />
+            <div className="mt-4 h-[2px] w-32 rounded-full bg-#00FFFF" />
           </div>
         </div>
       </div>

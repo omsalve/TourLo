@@ -9,7 +9,7 @@ export default function AllDay() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsDay((prev) => !prev);
-    }, 20000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -20,11 +20,12 @@ export default function AllDay() {
       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
       className="relative w-full flex justify-center"
     >
-      <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
-        <div className="absolute top-0 left-0 z-10 p-6 md:p-8">
-          <h1 className="text-3xl min-h-[300px] font-bold text-left leading-tight md:text-4xl lg:text-5xl">
+      {/* Smaller container with fixed max width, still 16:9 */}
+      <div className="relative w-full max-w-[1200px] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+        <div className="absolute top-0 left-0 z-10 p-4 md:p-6">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-left leading-tight">
             We can do this{" "}
-            <span className="relative inline-flex overflow-hidden align-baseline pb-2"> {/* <-- THE FIX */}
+            <span className="relative inline-flex overflow-hidden align-baseline pb-1">
               <AnimatePresence mode="wait">
                 {isDay ? (
                   <motion.span
@@ -33,7 +34,7 @@ export default function AllDay() {
                     animate={{ y: "0%", opacity: 1 }}
                     exit={{ y: "-100%", opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="inline-block"
+                    className="inline-block bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
                   >
                     all day.
                   </motion.span>
@@ -44,7 +45,7 @@ export default function AllDay() {
                     animate={{ y: "0%", opacity: 1 }}
                     exit={{ y: "-100%", opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="inline-block"
+                    className="inline-block bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
                   >
                     all night.
                   </motion.span>
@@ -55,7 +56,7 @@ export default function AllDay() {
         </div>
 
         <video
-          src="/videos/your-video.mp4"
+          src="/videos/daynight.mp4"
           poster="/images/video-poster.jpg"
           className="w-full h-full object-cover"
           autoPlay

@@ -5,14 +5,16 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Montserrat } from "next/font/google";
+import ScrollProgressBar from "./components/ScrollProgressBar";
 import ScrollSplash from "./components/ScrollSplash";
 import ScrollBrightText from "./components/RevealTex";
 import CTA from "./components/CTA";
 import Footer from "./components/footer";
+import BentoGrid , {BentoGridItem} from './components/bento-grid'
 import GridWrapper from "./components/GridWrapper";
 import { BackgroundRippleEffect } from "@/cellgrid/ui/background-ripple-effect";
-import { TextRevealCard } from "./components/text-reveal-card";
 import AllDay from "./components/alldayallnight";
+import { BentoGridSecondDemo } from "./components/2colgrid";
 
 // Client-only load to avoid SSR observer/scroll issues
 const ScrollStack = dynamic(
@@ -38,16 +40,27 @@ export default function Hero() {
   return (
     <div className="relative w-full min-h-screen overflow-hidden scroll-smooth">
       {/* GLOBAL BACKGROUND – replaced DotGrid with BackgroundRippleEffect */}
+      <ScrollProgressBar></ScrollProgressBar>
       <div
         className="fixed inset-0 z-0 bg-black"
         style={{ width: "100%", height: "100%", pointerEvents: "none" }}
       >
         {/* Same footprint; pointerEvents remain disabled to avoid intercepting UI clicks */}
-        <BackgroundRippleEffect hoverfillAlpha={0.28} hoverBorderAlpha={0.6} hoverBrightness={1.8} rows={8} cols={27} cellSize={56} />
+        <BackgroundRippleEffect
+          hoverfillAlpha={0.28}
+          hoverBorderAlpha={0.6}
+          hoverBrightness={1.8}
+          rows={8}
+          cols={27}
+          cellSize={56}
+        />
       </div>
 
       {/* Optional readability veil above the grid */}
       <div className="fixed inset-0 z-[1] bg-black/60 pointer-events-none" />
+
+      {/* Added the ScrollSplash component here */}
+      <ScrollSplash />
 
       {/* PAGE CONTENT */}
       <div className="relative z-10">
@@ -96,7 +109,7 @@ export default function Hero() {
             </motion.h1>
 
             <motion.button
-              className="rounded-lg bg-blue-600 px-6 py-3 transition hover:bg-blue-700"
+              className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition "
               variants={fadeInUp}
             >
               Watch Video →
@@ -107,8 +120,8 @@ export default function Hero() {
               variants={fadeInUp}
             >
               Tour-Lo helps you sell smarter, close faster. <br />
-              Built to turn brochures into immersive experiences. <br />
-              A simple tool that makes selling unforgettable.
+              Built to turn brochures into immersive experiences. <br />A simple
+              tool that makes selling unforgettable.
             </motion.p>
           </motion.div>
         </section>
@@ -160,7 +173,8 @@ export default function Hero() {
                   ease: "easeInOut",
                 }}
               >
-                We&apos;re Redefining Real Estate Sales.
+                We&apos;re Redefining <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
+>Real Estate Sales.</span>
               </motion.h1>
 
               <div className="w-full max-w-3xl text-left">
@@ -170,148 +184,15 @@ export default function Hero() {
           </div>
         </motion.section>
 
-        {/* ScrollStack */}
-        <section className="relative z-20 w-full -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
-          <div
-            id="scrollstack"
-            className="relative mx-auto max-w-8xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
-          >
-            <ScrollStack
-              backgroundColor="bg-transparent"
-              cards={[
-                {
-                  title:
-                    "Real-time 3D virtual tours with interactive hotspots",
-                  subtitle:
-                    "Experience unmatched realism and precision with our comprehensive 3D 360 VR tours.",
-                  content: (
-                    <div className="flex w-full flex-col md:flex-row">
-                      {/* Left Half: text (inset by 50px) */}
-                      <div className="w-full md:w-1/2 text-left pr-0 md:pr-8 p-[50px]">
-                        <h3 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                          Real-time 3D virtual tours with interactive hotspots
-                        </h3>
-                        <p className="mb-6 text-white">
-                          Deliver an intuitive and immersive journey with
-                          clickable hotspots, seamless movement, and rich
-                          context baked into every scene.
-                        </p>
-                        <ul className="mt-2 space-y-3">
-                          {[
-                            "360° scenes with smooth transitions",
-                            "Clickable hotspots for deep dives",
-                            "Optimized for web & mobile",
-                            "Shareable links with tracking",
-                          ].map((t) => (
-                            <li key={t} className="flex items-start gap-3">
-                              <svg
-                                aria-hidden="true"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="mt-1 h-5 w-5 flex-shrink-0 text-white"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.296a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.296 10.45a1 1 0 111.414-1.414l3.02 3.02 6.657-6.657a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-white/80">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="hidden md:block md:w-1/2" />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Digitised location mapping",
-                  content: (
-                    <div className="flex w-full flex-col md:flex-row">
-                      <div className="w-full md:w-1/2 text-left pr-0 md:pr-8 p-[50px]">
-                        <h3 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                          Digitised location mapping
-                        </h3>
-                        <p className="mb-6 text-white">
-                          Present schools, transit, essentials, and lifestyle
-                          hotspots in a clean, tappable map that answers “what’s
-                          nearby?” instantly.
-                        </p>
-                        <ul className="mt-2 space-y-3">
-                          {[
-                            "Curated POIs by category",
-                            "Distance & time estimates",
-                            "Filter by buyer persona",
-                            "Embeddable map sections",
-                          ].map((t) => (
-                            <li key={t} className="flex items-start gap-3">
-                              <svg
-                                aria-hidden="true"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="mt-1 h-5 w-5 flex-shrink-0 text-white"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.296a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.296 10.45a1 1 0 111.414-1.414l3.02 3.02 6.657-6.657a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-white/80">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="hidden md:block md:w-1/2" />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Hyperreal customisation",
-                  content: (
-                    <div className="flex w-full flex-col md:flex-row">
-                      <div className="w-full md:w-1/2 text-left pr-0 md:pr-8 p-[50px]">
-                        <h3 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                          Hyperreal customisation
-                        </h3>
-                        <p className="mb-6 text-white">
-                          Swap finishes, palettes, and layouts in-place to help
-                          buyers “see” their future home in seconds.
-                        </p>
-                        <ul className="mt-2 space-y-3">
-                          {[
-                            "Material & palette toggles",
-                            "Saved presets per buyer",
-                            "One-click before/after",
-                            "Export selections as PDF",
-                          ].map((t) => (
-                            <li key={t} className="flex items-start gap-3">
-                              <svg
-                                aria-hidden="true"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="mt-1 h-5 w-5 flex-shrink-0 text-white"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.296a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.296 10.45a1 1 0 111.414-1.414l3.02 3.02 6.657-6.657a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-white/80">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="hidden md:block md:w-1/2" />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </div>
-        </section>
+<section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
+      <div
+        id="grid-wrapper-container"
+        className="relative mx-auto max-w-7xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
+      >
+        {/* The GridWrapper component is now used here */}
+        <BentoGridSecondDemo />
+      </div>
+    </section>
 
         {/* Apple Type Section - Added negative margin to reduce space */}
         <section className="-mt-24 md:-mt-32 lg:-mt-48">
@@ -320,8 +201,8 @@ export default function Hero() {
 
         {/* All Day All Night Section - Added margin-top for spacing */}
         <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-32">
-  <AllDay />
-</section>
+          <AllDay />
+        </section>
 
         {/* Contact Us Section */}
         <motion.section
