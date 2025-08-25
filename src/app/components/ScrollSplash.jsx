@@ -3,114 +3,127 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// The total duration of the video
-const TOTAL_DURATION = 15;
-// The duration of each section
-const SECTION_DURATION = 5;
-// Number of sections
-const NUM_SECTIONS = TOTAL_DURATION / SECTION_DURATION;
+// Timecodes in SECONDS: auto (0→1.40), then scrolls to 2.25, then 5.00, then fade out
+// If your times are mm:ss, convert to seconds (e.g., 1:40 → 100, 2:25 → 145, 5:00 → 300)
+const CUE_POINTS = [1.4, 2.25, 5.0];
+const EPS = 0.03; // float tolerance
 
 export default function ScrollSplash({ onComplete }) {
-  // Ref for the video element to control it programmatically
   const videoRef = useRef(null);
 
-  // State to track which section has been completed (starts at 0, goes to 3)
-  const [completedSections, setCompletedSections] = useState(0);
-
-  // State to handle the exit animation
+  // How many cue points have been completed (0..CUE_POINTS.length)
+  const [segmentIndex, setSegmentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false); // blocks extra scrolls while advancing
   const [isExiting, setIsExiting] = useState(false);
 
-  // State to throttle scroll events and prevent spamming
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  // This effect handles the video play/pause logic when the section changes
+  // Lock body scroll while splash is visible
   useEffect(() => {
-    const video = videoRef.current;
-    // Don't do anything on the initial render or if there's no video
-    if (!video || completedSections === 0) return;
+    const orig = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = orig;
+    };
+  }, []);
 
-    // The time in the video where the current section ends
-    const targetTime = completedSections * SECTION_DURATION;
+  // Kick off the auto segment (0 → 1.40)
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
 
-    const handleTimeUpdate = () => {
-      // When the video's current time reaches or passes the target, pause it
-      if (video.currentTime >= targetTime) {
-        video.pause();
-        video.removeEventListener("timeupdate", handleTimeUpdate);
-        setIsAnimating(false); // Re-enable scrolling for the next section
+    const startAuto = () => {
+      try {
+        v.currentTime = 0;
+      } catch {}
+      setIsAnimating(true);
+      v.play().catch(() => {});
+    };
 
-        // If this was the final section, trigger the exit sequence
-        if (completedSections === NUM_SECTIONS) {
-          setTimeout(() => {
-            setIsExiting(true);
-            if (onComplete) onComplete(); // Notify parent component
-          }, 500); // A brief pause before exiting
-        }
+    if (v.readyState >= 1) {
+      startAuto();
+    } else {
+      v.addEventListener("loadedmetadata", startAuto, { once: true });
+      return () => v.removeEventListener("loadedmetadata", startAuto);
+    }
+  }, []);
+
+  // Advance toward next cue while animating
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    const onTimeUpdate = () => {
+      if (segmentIndex >= CUE_POINTS.length) return; // finished all cues
+      const target = CUE_POINTS[segmentIndex];
+      if (v.currentTime + EPS >= target) {
+        v.pause();
+        setIsAnimating(false);
+        setSegmentIndex((i) => i + 1); // mark cue as completed
       }
     };
 
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.play(); // Play the video to the next section
+    if (isAnimating && segmentIndex < CUE_POINTS.length) {
+      v.play().catch(() => {});
+      v.addEventListener("timeupdate", onTimeUpdate);
+    }
 
-    // Cleanup function to remove the event listener if the component unmounts
-    return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, [completedSections, onComplete]);
+    return () => v.removeEventListener("timeupdate", onTimeUpdate);
+  }, [isAnimating, segmentIndex]);
 
-
-  // This effect handles the scroll/wheel hijacking
+  // Wheel to advance: 2 plays + 1 exit
   useEffect(() => {
-    const handleWheel = (e) => {
-      // If we're already playing a section, ignore this scroll event
+    const onWheel = (e) => {
       if (isAnimating) return;
+      if (e.deltaY <= 0) return; // only respond to downward scroll
 
-      // Check for a downward scroll
-      if (e.deltaY > 0) {
-        // If we haven't completed all sections, advance to the next one
-        if (completedSections < NUM_SECTIONS) {
-          setIsAnimating(true); // Disable further scrolls until this section is done
-          setCompletedSections((prev) => prev + 1);
-        }
+      // Still have cues to play?
+      if (segmentIndex < CUE_POINTS.length) {
+        setIsAnimating(true);
+        videoRef.current?.play()?.catch(() => {});
+        return;
       }
+
+      // No more cues -> next scroll exits
+      setIsExiting(true);
+      setTimeout(() => {
+        if (onComplete) onComplete();
+      }, 1000); // match exit duration
     };
 
-    window.addEventListener("wheel", handleWheel);
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [isAnimating, segmentIndex, onComplete]);
 
-    // Cleanup function to remove the event listener
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-    };
-  }, [isAnimating, completedSections]);
-  
-  // Handler for the "Skip Intro" button
   const handleSkip = () => {
     setIsExiting(true);
-    if (onComplete) onComplete();
+    setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 1000);
   };
 
   return (
     <AnimatePresence>
       {!isExiting && (
         <motion.div
-          exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
           className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center"
         >
-          {/* Main Video Player */}
+          {/* Video */}
           <div className="relative w-full h-full">
             <video
               ref={videoRef}
-              src="/videos/your-splash-video.mp4" // IMPORTANT: Replace with your video path
+              src="/videos/splashscreen.mp4" /* replace with your path */
               className="w-full h-full object-cover"
               muted
               playsInline
               preload="auto"
+              autoPlay
             />
           </div>
 
-          {/* UI Overlay */}
+          {/* Overlay UI */}
           <div className="absolute inset-0 flex flex-col items-center justify-between p-8">
-            {/* Skip Button (Accessibility) */}
+            {/* Skip */}
             <div className="w-full flex justify-end">
               <button
                 onClick={handleSkip}
@@ -120,13 +133,13 @@ export default function ScrollSplash({ onComplete }) {
               </button>
             </div>
 
-            {/* Scroll Progress Indicator */}
+            {/* Progress dots: 3 total (for 1.40, 2.25, 5.00) */}
             <div className="flex space-x-3">
-              {Array.from({ length: NUM_SECTIONS }).map((_, index) => (
+              {CUE_POINTS.map((_, idx) => (
                 <div
-                  key={index}
+                  key={idx}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    completedSections > index ? "bg-white" : "bg-white/30"
+                    segmentIndex > idx ? "bg-white" : "bg-white/30"
                   }`}
                 />
               ))}

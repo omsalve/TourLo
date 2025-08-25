@@ -1,16 +1,28 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function AllDay() {
   const [isDay, setIsDay] = useState(true);
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsDay((prev) => !prev);
-    }, 5000);
-    return () => clearInterval(interval);
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      // Example: switch text every 5 seconds
+      const currentTime = Math.floor(video.currentTime);
+      if (currentTime % 10 < 5) {
+        setIsDay(true);
+      } else {
+        setIsDay(false);
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    return () => video.removeEventListener("timeupdate", handleTimeUpdate);
   }, []);
 
   return (
@@ -20,8 +32,8 @@ export default function AllDay() {
       transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
       className="relative w-full flex justify-center"
     >
-      {/* Smaller container with fixed max width, still 16:9 */}
-      <div className="relative w-full max-w-[1200px] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+      <div className="relative w-full max-w-[1300px] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+        {/* Text overlay */}
         <div className="absolute top-0 left-0 z-10 p-4 md:p-6">
           <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-left leading-tight">
             We can do this{" "}
@@ -45,7 +57,7 @@ export default function AllDay() {
                     animate={{ y: "0%", opacity: 1 }}
                     exit={{ y: "-100%", opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="inline-block bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
+                    className="inline-block bg-gradient-to-r from-purple-500 to-pink-400 bg-clip-text text-transparent"
                   >
                     all night.
                   </motion.span>
@@ -55,7 +67,9 @@ export default function AllDay() {
           </h1>
         </div>
 
+        {/* Video */}
         <video
+          ref={videoRef}
           src="/videos/daynight.mp4"
           poster="/images/video-poster.jpg"
           className="w-full h-full object-cover"

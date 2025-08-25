@@ -59,7 +59,7 @@ const items = [
     title: "Real-Time Inventory",
     description:
       "No more “Let me check and get back. Just tap, talk, and sell — the data’s already there.",
-    header: <VideoHeader src="/videos/inventory.mp4" />,
+    header: <VideoHeader src="/videos/cardvideos/inventory.mp4" />,
     className: "md:col-span-2",
     icon: <Boxes className="h-4 w-4 text-neutral-500" />,
   },

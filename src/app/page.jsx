@@ -109,11 +109,15 @@ export default function Hero() {
             </motion.h1>
 
             <motion.button
-              className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition "
-              variants={fadeInUp}
-            >
-              Watch Video →
-            </motion.button>
+  className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition"
+  variants={fadeInUp}
+  onClick={() => {
+    document.getElementById("promo")?.scrollIntoView({ behavior: "smooth" });
+  }}
+>
+  Watch Video →
+</motion.button>
+
 
             <motion.p
               className="max-w-2xl text-base leading-relaxed text-gray-300 sm:text-lg"
@@ -126,7 +130,7 @@ export default function Hero() {
           </motion.div>
         </section>
         {/* Video Card Section */}
-        <section className="relative w-full py-12">
+        <section id="promo" className="relative w-full py-12" >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -135,9 +139,9 @@ export default function Hero() {
             className="mx-auto w-full px-6 flex justify-center"
           >
             {/* Card */}
-            <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+            <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden y-translate-[-200px]">
               <video
-                src="/videos/your-video.mp4"
+                src="/videos/promo.mp4"
                 poster="/images/video-poster.jpg"
                 className="w-full h-full object-cover"
                 autoPlay
@@ -200,7 +204,7 @@ export default function Hero() {
         </section>
 
         {/* All Day All Night Section - Added margin-top for spacing */}
-        <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-32">
+        <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-12 md:mt-16 lg:mt-20">
           <AllDay />
         </section>
 
