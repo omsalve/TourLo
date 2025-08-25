@@ -1,103 +1,192 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Timecodes in SECONDS: auto (0→1.40), then scrolls to 2.25, then 5.00, then fade out
-// If your times are mm:ss, convert to seconds (e.g., 1:40 → 100, 2:25 → 145, 5:00 → 300)
-const CUE_POINTS = [1.4, 2.25, 5.0];
-const EPS = 0.03; // float tolerance
+/**
+ * Timecodes (MM:SS → seconds):
+ * 1:40 → 100
+ * 4:08 → 248
+ * 6:30 → 390
+ */
+const CUE_POINTS = [100, 248, 390];
+const EPS = 0.02; // tolerance for clamping
 
 export default function ScrollSplash({ onComplete }) {
   const videoRef = useRef(null);
+  const rafRef = useRef(0);
 
-  // How many cue points have been completed (0..CUE_POINTS.length)
+  const bodyOverflowRef = useRef("");
+  const htmlOverflowRef = useRef("");
+
+  // how many cues have been reached (0..CUE_POINTS.length)
   const [segmentIndex, setSegmentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false); // blocks extra scrolls while advancing
   const [isExiting, setIsExiting] = useState(false);
 
-  // Lock body scroll while splash is visible
+  const isActive = !isExiting;
+
+  // Lock page scroll while splash is up
   useEffect(() => {
-    const orig = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    bodyOverflowRef.current = document.body.style.overflowY || "";
+    htmlOverflowRef.current = document.documentElement.style.overflowY || "";
+    document.body.style.overflowY = "hidden";
+    document.documentElement.style.overflowY = "hidden";
     return () => {
-      document.body.style.overflow = orig;
+      document.body.style.overflowY = bodyOverflowRef.current || "auto";
+      document.documentElement.style.overflowY =
+        htmlOverflowRef.current || "auto";
     };
   }, []);
 
-  // Kick off the auto segment (0 → 1.40)
+  // Also unlock immediately when exiting starts
+  useEffect(() => {
+    if (isExiting) {
+      document.body.style.overflowY = bodyOverflowRef.current || "auto";
+      document.documentElement.style.overflowY =
+        htmlOverflowRef.current || "auto";
+    }
+  }, [isExiting]);
+
+  // Cancel any in-flight RAF
+  const cancelRAF = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    }
+  };
+
+  // Drive the video to a target time and pause/clamp there
+  const playTo = (targetSeconds) => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    cancelRAF();
+
+    // Ensure playback starts (no autoplay attr on <video>)
+    v.play().catch(() => {});
+
+    const tick = () => {
+      if (!v) return;
+      if (v.currentTime + EPS >= targetSeconds) {
+        try {
+          v.pause();
+          v.currentTime = targetSeconds; // clamp EXACTLY
+        } catch {}
+        cancelRAF();
+        setSegmentIndex((i) => i + 1);
+        return;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+  };
+
+  // Start the auto segment: 0 → 1:40
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    const startAuto = () => {
+    const start = () => {
       try {
         v.currentTime = 0;
       } catch {}
-      setIsAnimating(true);
-      v.play().catch(() => {});
+      playTo(CUE_POINTS[0]);
     };
 
     if (v.readyState >= 1) {
-      startAuto();
+      start();
     } else {
-      v.addEventListener("loadedmetadata", startAuto, { once: true });
-      return () => v.removeEventListener("loadedmetadata", startAuto);
+      v.addEventListener("loadedmetadata", start, { once: true });
+      return () => v.removeEventListener("loadedmetadata", start);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Advance toward next cue while animating
+  // Wheel to advance (only while active)
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
+    if (!isActive) return;
 
-    const onTimeUpdate = () => {
-      if (segmentIndex >= CUE_POINTS.length) return; // finished all cues
-      const target = CUE_POINTS[segmentIndex];
-      if (v.currentTime + EPS >= target) {
-        v.pause();
-        setIsAnimating(false);
-        setSegmentIndex((i) => i + 1); // mark cue as completed
-      }
-    };
-
-    if (isAnimating && segmentIndex < CUE_POINTS.length) {
-      v.play().catch(() => {});
-      v.addEventListener("timeupdate", onTimeUpdate);
-    }
-
-    return () => v.removeEventListener("timeupdate", onTimeUpdate);
-  }, [isAnimating, segmentIndex]);
-
-  // Wheel to advance: 2 plays + 1 exit
-  useEffect(() => {
     const onWheel = (e) => {
-      if (isAnimating) return;
-      if (e.deltaY <= 0) return; // only respond to downward scroll
+      // prevent the page from scrolling while splash is active
+      e.preventDefault();
 
-      // Still have cues to play?
+      // still have cues to play?
       if (segmentIndex < CUE_POINTS.length) {
-        setIsAnimating(true);
-        videoRef.current?.play()?.catch(() => {});
+        playTo(CUE_POINTS[segmentIndex]);
         return;
       }
 
-      // No more cues -> next scroll exits
-      setIsExiting(true);
-      setTimeout(() => {
-        if (onComplete) onComplete();
-      }, 1000); // match exit duration
+      // no more cues -> exit on next scroll
+      if (!isExiting) {
+        setIsExiting(true);
+        // optional: notify parent after fade
+        setTimeout(() => onComplete && onComplete(), 1000);
+      }
     };
 
-    window.addEventListener("wheel", onWheel, { passive: true });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [isAnimating, segmentIndex, onComplete]);
+    // Non-passive so preventDefault works
+    window.addEventListener("wheel", onWheel, { passive: false });
+    document.addEventListener("wheel", onWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      document.removeEventListener("wheel", onWheel);
+    };
+  }, [isActive, segmentIndex, isExiting, onComplete]);
+
+  // Touch (mobile) to advance (only while active)
+  useEffect(() => {
+    if (!isActive) return;
+
+    let startY = null;
+
+    const onTouchStart = (e) => {
+      startY = e.touches?.[0]?.clientY ?? null;
+    };
+
+    const onTouchMove = (e) => {
+      if (startY == null) return;
+      const dy = (e.touches?.[0]?.clientY ?? startY) - startY;
+      if (dy < -18) {
+        e.preventDefault();
+        if (segmentIndex < CUE_POINTS.length) {
+          playTo(CUE_POINTS[segmentIndex]);
+        } else if (!isExiting) {
+          setIsExiting(true);
+          setTimeout(() => onComplete && onComplete(), 1000);
+        }
+      }
+    };
+
+    window.addEventListener("touchstart", onTouchStart, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+    };
+  }, [isActive, segmentIndex, isExiting, onComplete]);
+
+  // Fallback: if the video ends for any reason, exit
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const onEnded = () => {
+      setIsExiting(true);
+      setTimeout(() => onComplete && onComplete(), 1000);
+    };
+    v.addEventListener("ended", onEnded);
+    return () => v.removeEventListener("ended", onEnded);
+  }, [onComplete]);
+
+  // Cleanup RAF on unmount
+  useEffect(() => cancelRAF, []);
 
   const handleSkip = () => {
+    cancelRAF();
     setIsExiting(true);
-    setTimeout(() => {
-      if (onComplete) onComplete();
-    }, 1000);
+    setTimeout(() => onComplete && onComplete(), 1000);
   };
 
   return (
@@ -107,17 +196,19 @@ export default function ScrollSplash({ onComplete }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}
           className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center"
+          // during fade-out, let page receive events
+          style={{ pointerEvents: isActive ? "auto" : "none" }}
         >
           {/* Video */}
           <div className="relative w-full h-full">
             <video
               ref={videoRef}
-              src="/videos/splashscreen.mp4" /* replace with your path */
+              src="/videos/splashscreen.mp4"  // <-- your path
               className="w-full h-full object-cover"
               muted
               playsInline
               preload="auto"
-              autoPlay
+              // NOTE: no 'autoPlay' attribute; we drive it manually
             />
           </div>
 
@@ -133,13 +224,13 @@ export default function ScrollSplash({ onComplete }) {
               </button>
             </div>
 
-            {/* Progress dots: 3 total (for 1.40, 2.25, 5.00) */}
+            {/* Progress dots for 1:40, 4:08, 6:30 */}
             <div className="flex space-x-3">
               {CUE_POINTS.map((_, idx) => (
                 <div
                   key={idx}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    segmentIndex > idx ? "bg-white" : "bg-white/30"
+                    idx < segmentIndex ? "bg-white" : "bg-white/30"
                   }`}
                 />
               ))}
