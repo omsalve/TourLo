@@ -5,12 +5,14 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Montserrat } from "next/font/google";
-// ⛔️ DotGrid removed
+import ScrollSplash from "./components/ScrollSplash";
 import ScrollBrightText from "./components/RevealTex";
 import CTA from "./components/CTA";
 import Footer from "./components/footer";
 import GridWrapper from "./components/GridWrapper";
 import { BackgroundRippleEffect } from "@/cellgrid/ui/background-ripple-effect";
+import { TextRevealCard } from "./components/text-reveal-card";
+import AllDay from "./components/alldayallnight";
 
 // Client-only load to avoid SSR observer/scroll issues
 const ScrollStack = dynamic(
@@ -50,19 +52,19 @@ export default function Hero() {
       {/* PAGE CONTENT */}
       <div className="relative z-10">
         {/* Hero Section */}
-        <section className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white">
+        <section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-6 text-white">
           {/* Logo */}
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="absolute left-8 top-6"
+            className="absolute left-8 top-1"
           >
             <Image
               src="/images/logos/logo.png"
               alt="Logo"
-              width={200}
-              height={300}
+              width={150}
+              height={200}
               priority
             />
           </motion.div>
@@ -73,7 +75,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="absolute right-6 top-6 cursor-pointer rounded-lg bg-transparent px-5 py-2 text-white/70 transition hover:text-white sm:px-6 sm:py-3"
+            className="absolute right-6 top-4 cursor-pointer rounded-lg bg-transparent px-5 py-2 text-white/70 transition hover:text-white sm:px-6 sm:py-3"
           >
             CONTACT US
           </motion.a>
@@ -110,6 +112,30 @@ export default function Hero() {
             </motion.p>
           </motion.div>
         </section>
+        {/* Video Card Section */}
+        <section className="relative w-full py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mx-auto w-full px-6 flex justify-center"
+          >
+            {/* Card */}
+            <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
+              <video
+                src="/videos/your-video.mp4"
+                poster="/images/video-poster.jpg"
+                className="w-full h-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+              />
+            </div>
+          </motion.div>
+        </section>
 
         {/* What We Do (aligned to Hero text) */}
         <motion.section
@@ -125,9 +151,17 @@ export default function Hero() {
         >
           <div className="mx-auto w-full max-w-5xl px-6">
             <div style={{ marginLeft: "-200px" }}>
-              <h1 className="mb-6 max-h-[200px] text-4xl font-bold leading-tight md:text-6xl">
+              <motion.h1
+                className="mb-6 max-h-[200px] text-4xl font-bold leading-tight md:text-6xl overflow-hidden"
+                initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+                animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+                transition={{
+                  duration: 2, // slow + cinematic
+                  ease: "easeInOut",
+                }}
+              >
                 We&apos;re Redefining Real Estate Sales.
-              </h1>
+              </motion.h1>
 
               <div className="w-full max-w-3xl text-left">
                 <ScrollBrightText sentence="From interactive walkthroughs to unit-level interaction—Tour-Lo helps buyers decide faster, and developers close quicker." />
@@ -137,7 +171,7 @@ export default function Hero() {
         </motion.section>
 
         {/* ScrollStack */}
-        <section className="relative min-h-screen w-full">
+        <section className="relative z-20 w-full -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
           <div
             id="scrollstack"
             className="relative mx-auto max-w-8xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
@@ -274,96 +308,19 @@ export default function Hero() {
                     </div>
                   ),
                 },
-                {
-                  title: "Personalised apartment walkthrough",
-                  content: (
-                    <div className="flex w-full flex-col md:flex-row">
-                      <div className="w-full md:w-1/2 text-left pr-0 md:pr-8 p-[50px]">
-                        <h3 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                          Personalised apartment walkthrough
-                        </h3>
-                        <p className="mb-6 text-white">
-                          A guided flow that highlights layouts, key rooms, and
-                          views tailored to each buyer’s interests.
-                        </p>
-                        <ul className="mt-2 space-y-3">
-                          {[
-                            "Auto-path guided tours",
-                            "Room highlights & notes",
-                            "Balcony & view previews",
-                            "Agent-script overlays",
-                          ].map((t) => (
-                            <li key={t} className="flex items-start gap-3">
-                              <svg
-                                aria-hidden="true"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="mt-1 h-5 w-5 flex-shrink-0 text-white"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.296a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.296 10.45a1 1 0 111.414-1.414l3.02 3.02 6.657-6.657a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-white/80">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="hidden md:block md:w-1/2" />
-                    </div>
-                  ),
-                },
-                {
-                  title: "Detailed search and real-time inventory management",
-                  content: (
-                    <div className="flex w-full flex-col md:flex-row">
-                      <div className="w-full md:w-1/2 text-left pr-0 md:pr-8 p-[50px]">
-                        <h3 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                          Detailed search and real-time inventory management
-                        </h3>
-                        <p className="mb-6 text-white">
-                          Filter by tower, stack, floor, view, and price — with
-                          live availability to drive quicker decisions.
-                        </p>
-                        <ul className="mt-2 space-y-3">
-                          {[
-                            "Live unit availability",
-                            "Smart filters & save search",
-                            "Hold & enquiry flows",
-                            "CRM export & webhook",
-                          ].map((t) => (
-                            <li key={t} className="flex items-start gap-3">
-                              <svg
-                                aria-hidden="true"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                className="mt-1 h-5 w-5 flex-shrink-0 text-white"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.296a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.296 10.45a1 1 0 111.414-1.414l3.02 3.02 6.657-6.657a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-white/80">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="hidden md:block md:w-1/2" />
-                    </div>
-                  ),
-                },
               ]}
             />
           </div>
         </section>
 
-        {/* Apple Type Section */}
-        <section>
+        {/* Apple Type Section - Added negative margin to reduce space */}
+        <section className="-mt-24 md:-mt-32 lg:-mt-48">
           <GridWrapper />
+        </section>
+
+        {/* All Day All Night Section - Added margin-top for spacing */}
+        <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-32">
+          <AllDay />
         </section>
 
         {/* Contact Us Section */}
@@ -380,9 +337,10 @@ export default function Hero() {
         </motion.section>
       </div>
 
-      <section className="bg-transparent">
+      <section>
         <Footer />
       </section>
+      {/* Footer */}
 
       {/* ScrollStack scrollbar hide */}
       <style jsx global>{`

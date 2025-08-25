@@ -16,7 +16,8 @@ export default function GridWrapper() {
   const handleTab = (idx: number) => setActive(idx);
 
   return (
-    <section className="relative mx-auto max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(90deg,rgba(250,66,167,.6),rgba(118,70,255,.6),rgba(0,174,255,.6))]">
+   <section className="relative mx-auto max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
+
       {/* Inner container */}
       <div className="relative rounded-[26px] bg-black text-white overflow-hidden">
         {/* Soft edge glows */}
@@ -25,9 +26,9 @@ export default function GridWrapper() {
         {/* Header copy */}
         <div className="px-6 sm:px-10 lg:px-16 pt-28 pb-16 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
-            <span className="whitespace-nowrap bg-clip-text text-transparent bg-[linear-gradient(90deg,#00b3ff_0%,#00ffff_55%,#7ea8ff_80%,#a884ff_100%)]">
-              Tour-Lo Third-Eye.
-            </span>{" "}
+            <span className="whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
+  Tour-Lo Third-Eye.
+</span>{" "}
             <br className="hidden sm:block" />
             <span className="text-5xl font-semibold tracking-normal">Nothing gets missed.</span>
           </h1>

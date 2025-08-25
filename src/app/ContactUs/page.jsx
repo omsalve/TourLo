@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+// Assuming Threads is located correctly relative to this component.
+// Update the path if necessary.
 import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
 
 export default function ContactUs() {
@@ -32,8 +34,10 @@ export default function ContactUs() {
   const errorRing = "ring-red-500/60 focus:ring-red-400";
 
   return (
-    // Root becomes the positioning context for the background
-    <div className="relative min-h-screen flex flex-col">
+    // FIX: Added the "invert" class here.
+    // This will apply a `filter: invert(1)` to counteract a potential parent inversion,
+    // restoring the component's intended dark theme.
+    <div className="relative min-h-screen flex flex-col invert">
       {/* Background layer: fills the entire page behind content */}
       <div className="absolute inset-0 -z-10">
         <Threads
@@ -171,7 +175,7 @@ export default function ContactUs() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold text-white hover:scale-105 transition-transform"
+              className="w-full py-3 bg-white rounded-lg font-semibold text-black hover:scale-105 transition-transform"
             >
               Send Message
             </button>
