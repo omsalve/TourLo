@@ -25,8 +25,8 @@ const ScrollBrightText = ({ sentence = "", fontSize = "2rem", lineHeight = "3rem
     // Single ScrollTrigger for the whole container
     ScrollTrigger.create({
       trigger: containerRef.current,
-      start: "top 70%",
-      end: "bottom 80%",
+      start: "top 100%",
+      end: "bottom 70%",
       scrub: true,
       onUpdate: (self) => {
         const progress = self.progress; // 0 to 1

@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-// Assuming Threads is located correctly relative to this component.
-// Update the path if necessary.
 import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
 
 export default function ContactUs() {
@@ -20,7 +18,8 @@ export default function ContactUs() {
     const nextErrors = {};
     if (!fullName.trim()) nextErrors.fullName = "Full name is required.";
     if (!email.trim()) nextErrors.email = "Email is required.";
-    else if (!/^\S+@\S+\.\S+$/.test(email)) nextErrors.email = "Enter a valid email.";
+    else if (!/^\S+@\S+\.\S+$/.test(email))
+      nextErrors.email = "Enter a valid email.";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -34,12 +33,12 @@ export default function ContactUs() {
   const errorRing = "ring-red-500/60 focus:ring-red-400";
 
   return (
-    // FIX: Added the "invert" class here.
-    // This will apply a `filter: invert(1)` to counteract a potential parent inversion,
-    // restoring the component's intended dark theme.
-    <div className="relative min-h-screen flex flex-col invert">
+    // Root becomes the positioning context for the background
+    // REMOVED bg-black from here
+    <div className="relative min-h-screen flex flex-col">
       {/* Background layer: fills the entire page behind content */}
-      <div className="absolute inset-0 -z-10">
+      {/* ADDED bg-black here */}
+      <div className="absolute inset-0 -z-10 bg-black">
         <Threads
           amplitude={1}
           distance={0}
@@ -108,7 +107,9 @@ export default function ContactUs() {
                   className={`${inputBase} ${errors.fullName ? errorRing : ""}`}
                   placeholder="John Doe"
                   aria-invalid={!!errors.fullName}
-                  aria-describedby={errors.fullName ? "fullName-error" : undefined}
+                  aria-describedby={
+                    errors.fullName ? "fullName-error" : undefined
+                  }
                   autoComplete="name"
                 />
                 {errors.fullName && (
@@ -175,7 +176,7 @@ export default function ContactUs() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-white rounded-lg font-semibold text-black hover:scale-105 transition-transform"
+              className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold text-white hover:scale-105 transition-transform"
             >
               Send Message
             </button>

@@ -320,8 +320,8 @@ export default function Hero() {
 
         {/* All Day All Night Section - Added margin-top for spacing */}
         <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-32">
-          <AllDay />
-        </section>
+  <AllDay />
+</section>
 
         {/* Contact Us Section */}
         <motion.section
