@@ -17,10 +17,6 @@ import AllDay from "./components/alldayallnight";
 import { BentoGridSecondDemo } from "./components/2colgrid";
 
 // Client-only load to avoid SSR observer/scroll issues
-const ScrollStack = dynamic(
-  () => import("@/app/components/lightswind/scroll-stack"),
-  { ssr: false }
-);
 
 const montserrat = Montserrat({
   subsets: ["latin"],
