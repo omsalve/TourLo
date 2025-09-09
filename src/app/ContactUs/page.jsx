@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
 
 export default function ContactUs() {
   const [fullName, setFullName] = useState("");
@@ -11,9 +9,12 @@ export default function ContactUs() {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setResponseMessage(""); // Clear previous response message
 
     const nextErrors = {};
     if (!fullName.trim()) nextErrors.fullName = "Full name is required.";
@@ -24,8 +25,35 @@ export default function ContactUs() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    // TODO: replace with your API call
-    console.log({ fullName, email, phone, message });
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fullName, email, phone, message }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setResponseMessage("Your message was sent successfully! We'll be in touch soon.");
+        // Clear the form
+        setFullName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
+        setErrors({});
+      } else {
+        setResponseMessage(data.message || "Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+      setResponseMessage("Failed to submit form. Please check your network and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputBase =
@@ -34,18 +62,15 @@ export default function ContactUs() {
 
   return (
     // Root becomes the positioning context for the background
-    // REMOVED bg-black from here
     <div className="relative min-h-screen flex flex-col">
-      {/* Background layer: fills the entire page behind content */}
-      {/* ADDED bg-black here */}
-      <div className="absolute inset-0 -z-10 bg-black">
-        <Threads
-          amplitude={1}
-          distance={0}
-          enableMouseInteraction={true}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      {/* Background layer: fills the entire page behind content with a subtle pattern */}
+      <div
+        className="absolute inset-0 -z-10 bg-black"
+        style={{
+          backgroundImage: "radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%)",
+          backgroundSize: "20px 20px"
+        }}
+      ></div>
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -57,20 +82,18 @@ export default function ContactUs() {
         <div className="flex-1 bg-transparent flex flex-col px-8 py-6">
           {/* Logo Top-Left */}
           <div className="flex justify-start">
-            <Image
+            <img
               src="/images/logos/logo.png"
               alt="Logo"
-              width={70}
-              height={70}
-              className="object-contain"
-              priority
+              className="object-contain w-[70px] h-[70px]"
+              loading="lazy"
             />
           </div>
 
           {/* Content Centered */}
           <div className="flex-1 flex flex-col items-center justify-center text-center">
             <h1 className="text-4xl font-bold text-white mb-4">
-              Let’s Talk <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">Real Estate Innovation</span> 
+              Let’s Talk <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">Real Estate Innovation</span>
             </h1>
             <p className="text-white/80 max-w-lg">
               Whether you’re a real estate developer, marketing agency, or sales
@@ -174,11 +197,24 @@ export default function ContactUs() {
               />
             </div>
 
+            {/* Response Message */}
+            {responseMessage && (
+              <p
+                className={`text-center mb-4 ${
+                  responseMessage.includes("success") ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {responseMessage}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full py-3 bbg-gradient-to-r from-cyan-500 to-cyan-300 rounded-lg font-semibold text-white hover:scale-105 transition-transform"
+              disabled={isSubmitting}
+              className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-cyan-300 rounded-lg font-semibold text-white transition-all
+                ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
             >
-              Send Message
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
