@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
 
 export default function ContactUs() {
   const [fullName, setFullName] = useState("");
@@ -62,15 +64,18 @@ export default function ContactUs() {
 
   return (
     // Root becomes the positioning context for the background
+    // REMOVED bg-black from here
     <div className="relative min-h-screen flex flex-col">
-      {/* Background layer: fills the entire page behind content with a subtle pattern */}
-      <div
-        className="absolute inset-0 -z-10 bg-black"
-        style={{
-          backgroundImage: "radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%)",
-          backgroundSize: "20px 20px"
-        }}
-      ></div>
+      {/* Background layer: fills the entire page behind content */}
+      {/* ADDED bg-black here */}
+      <div className="absolute inset-0 -z-10 bg-black">
+        <Threads
+          amplitude={1}
+          distance={0}
+          enableMouseInteraction={true}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -82,11 +87,13 @@ export default function ContactUs() {
         <div className="flex-1 bg-transparent flex flex-col px-8 py-6">
           {/* Logo Top-Left */}
           <div className="flex justify-start">
-            <img
+            <Image
               src="/images/logos/logo.png"
               alt="Logo"
-              className="object-contain w-[70px] h-[70px]"
-              loading="lazy"
+              width={70}
+              height={70}
+              className="object-contain"
+              priority
             />
           </div>
 
