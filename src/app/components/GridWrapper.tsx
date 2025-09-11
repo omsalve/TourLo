@@ -121,8 +121,7 @@ const SliderTabs = ({
         );
       })}
     </nav>
-    {/* Corrected the invalid Tailwind class here */}
-    <div className="mt-4 h-[2px] w-32 rounded-full bg-[#00FFFF]" />
+   
   </div>
 );
 
