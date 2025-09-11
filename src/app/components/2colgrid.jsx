@@ -49,9 +49,9 @@ const items = [
     icon: <Puzzle className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "The Art of Design",
-    description: "Discover the beauty of thoughtful and functional design.",
-    header: <VideoHeader src="/videos/design.mp4" />,
+    title: "Immersive Ready",
+    description: "Experience tomorrow’s living, enabled on every VR device  .",
+    header: <VideoHeader src="/videos/cardvideos/immersive.mp4" />,
     className: "md:col-span-1",
     icon: <PenTool className="h-4 w-4 text-neutral-500" />,
   },

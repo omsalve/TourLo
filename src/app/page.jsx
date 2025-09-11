@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
@@ -10,7 +10,7 @@ import ScrollSplash from "./components/ScrollSplash";
 import ScrollBrightText from "./components/RevealTex";
 import CTA from "./components/CTA";
 import Footer from "./components/footer";
-import BentoGrid , {BentoGridItem} from './components/bento-grid'
+import BentoGrid, { BentoGridItem } from './components/bento-grid';
 import GridWrapper from "./components/GridWrapper";
 import { BackgroundRippleEffect } from "@/cellgrid/ui/background-ripple-effect";
 import AllDay from "./components/alldayallnight";
@@ -32,6 +32,41 @@ export default function Hero() {
       transition: { duration: 0.8, ease: "easeOut" },
     },
   };
+
+  // Use a ref to access the video element in the DOM
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Play the video when 100% of the element is in view
+          videoElement.play().catch(error => {
+            // Catch and ignore the common "The play() request was interrupted" error
+            // This happens when the browser's autoplay policies interfere
+            console.error("Video play failed:", error);
+          });
+        } else {
+          // Pause the video when any part of it leaves the view
+          videoElement.pause();
+        }
+      },
+      {
+        // The callback will be fired when 100% of the element is visible
+        threshold: 1.0,
+      }
+    );
+
+    observer.observe(videoElement);
+
+    // Clean up the observer when the component unmounts
+    return () => {
+      observer.unobserve(videoElement);
+    };
+  }, []);
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden scroll-smooth">
@@ -105,14 +140,14 @@ export default function Hero() {
             </motion.h1>
 
             <motion.button
-  className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition"
-  variants={fadeInUp}
-  onClick={() => {
-    document.getElementById("promo")?.scrollIntoView({ behavior: "smooth" });
-  }}
->
-  Watch Video →
-</motion.button>
+              className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition"
+              variants={fadeInUp}
+              onClick={() => {
+                document.getElementById("promo")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Watch Video →
+            </motion.button>
 
 
             <motion.p
@@ -137,10 +172,12 @@ export default function Hero() {
             {/* Card */}
             <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden y-translate-[-200px]">
               <video
+                // Add the ref to the video element
+                ref={videoRef}
                 src="/videos/promo.mp4"
                 poster="/images/video-poster.jpg"
                 className="w-full h-full object-cover"
-                autoPlay
+                // Remove autoPlay attribute
                 muted
                 loop
                 playsInline
@@ -174,7 +211,7 @@ export default function Hero() {
                 }}
               >
                 We&apos;re Redefining <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
->Real Estate Sales.</span>
+                >Real Estate Sales.</span>
               </motion.h1>
 
               <div className="w-full max-w-3xl text-left">
@@ -184,15 +221,15 @@ export default function Hero() {
           </div>
         </motion.section>
 
-<section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
-      <div
-        id="grid-wrapper-container"
-        className="relative mx-auto max-w-7xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
-      >
-        {/* The GridWrapper component is now used here */}
-        <BentoGridSecondDemo />
-      </div>
-    </section>
+        <section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
+          <div
+            id="grid-wrapper-container"
+            className="relative mx-auto max-w-7xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
+          >
+            {/* The GridWrapper component is now used here */}
+            <BentoGridSecondDemo />
+          </div>
+        </section>
 
         {/* Apple Type Section - Added negative margin to reduce space */}
         <section className="-mt-24 md:-mt-32 lg:-mt-48">

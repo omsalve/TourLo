@@ -3,124 +3,141 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const TABS = [
-  { label: "3D Digital Twin", src: "/videos/testvideo.mp4" },
-  { label: "Neighborhood", src: "/videos/neighborhood.mp4" },
-  { label: "Connectivity", src: "/videos/connectivity.mp4" },
-  { label: "Virtual Tour", src: "/videos/connectivity.mp4" },
-  { label: "Realtime Inventory", src: "/videos/realtime-inventory.mp4" },
+// --- Data and Type Definitions ---
+
+type Tab = {
+  label: string;
+  src: string;
+};
+
+const TABS: Tab[] = [
+  { label: "3D Digital Twin", src: "/videos/gridvideos/testvideo.mp4" },
+  { label: "Neighborhood", src: "/videos/gridvideos/neighbourhood.mp4" },
+  { label: "Connectivity", src: "/videos/gridvideos/connectivity.mp4" },
+  { label: "Virtual Tour", src: "/videos/gridvideos/virtualtour.mp4" },
+  { label: "Realtime Inventory", src: "/videos/gridvideos/inventory.mp4" },
 ];
+
+// --- Sub-components ---
+
+/**
+ * Renders the main heading and descriptive text for the section.
+ */
+const GridHeader = () => (
+  <div className="px-6 sm:px-10 lg:px-16 pt-28 pb-16 text-center">
+    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
+      <span className="whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
+        Tour-Lo Third-Eye.
+      </span>{" "}
+      <br className="hidden sm:block" />
+      <span className="text-5xl font-semibold tracking-normal">
+        Nothing gets missed.
+      </span>
+    </h1>
+    <p className="mx-auto mt-5 max-w-3xl text-sm sm:text-base text-white/70 leading-relaxed">
+      <span className="text-white font-bold">Genius, at the point of sale: </span>
+      Tour-Lo is not just a tool — it’s the new language of real estate. It helps to
+      present with <span className="text-white font-bold">precision, emotion, and confidence.</span> With
+      interactive storytelling and jaw-dropping visuals, <br /> it sells
+      experiences, not just homes. Your pitch just got sharper, faster, and
+      smarter.
+    </p>
+    <a
+      href="#"
+      className="mt-4 inline-block text-sm sm:text-base font-medium bg-clip-text text-transparent bg-[#51b8ff] hover:opacity-90"
+    >
+      A seamless, cinematic, tap-and-glide sales experience ›
+    </a>
+  </div>
+);
+
+/**
+ * Renders the horizontally scrolling video slider.
+ */
+const VideoSlider = ({ tabs, active }: { tabs: Tab[]; active: number }) => (
+  <div className="relative mx-auto max-w-4xl overflow-hidden">
+    <motion.div
+      className="flex w-full"
+      animate={{ x: `-${active * 100}%` }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      style={{ willChange: "transform" }}
+    >
+      {tabs.map((tab) => (
+        <div key={tab.label} className="w-full shrink-0 px-4 sm:px-6">
+          <div className="rounded-2xl overflow-hidden">
+            <video
+              src={tab.src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              width={1600}
+              height={900}
+              className="block w-full h-auto"
+            />
+          </div>
+        </div>
+      ))}
+    </motion.div>
+  </div>
+);
+
+/**
+ * Renders the clickable tabs to control the slider.
+ */
+const SliderTabs = ({
+  tabs,
+  active,
+  onTabClick,
+}: {
+  tabs: Tab[];
+  active: number;
+  onTabClick: (index: number) => void;
+}) => (
+  <div className="mt-16 flex flex-col items-center">
+    <nav className="flex items-center gap-8 text-sm sm:text-base">
+      {tabs.map((tab, idx) => {
+        const isActive = idx === active;
+        return (
+          <button
+            key={tab.label}
+            type="button"
+            onClick={() => onTabClick(idx)}
+            className={`relative font-medium ${
+              isActive
+                ? "text-white"
+                : "text-white/60 hover:text-white transition"
+            }`}
+          >
+            {tab.label}
+            {isActive && (
+              <motion.span
+                layoutId="tab-underline"
+                className="absolute -bottom-2 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-cyan-500 to-cyan-300"
+                transition={{ type: "spring", stiffness: 500, damping: 40 }}
+              />
+            )}
+          </button>
+        );
+      })}
+    </nav>
+    {/* Corrected the invalid Tailwind class here */}
+    <div className="mt-4 h-[2px] w-32 rounded-full bg-[#00FFFF]" />
+  </div>
+);
+
+// --- Main Component ---
 
 export default function GridWrapper() {
   const [active, setActive] = useState(0);
-  const handleTab = (idx: number) => setActive(idx);
 
   return (
     <section className="relative mx-auto translate-y-[-200px] max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
-      {/* Inner container */}
       <div className="relative rounded-[26px] bg-black/80 text-white overflow-hidden">
-        {/* Header copy */}
-        <div className="px-6 sm:px-10 lg:px-16 pt-28 pb-16 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
-            <span className="whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
-              Tour-Lo Third-Eye.
-            </span>{" "}
-            <br className="hidden sm:block" />
-            <span className="text-5xl font-semibold tracking-normal">
-              Nothing gets missed.
-            </span>
-          </h1>
-
-          <p className="mx-auto mt-5 max-w-3xl text-sm sm:text-base text-white/70 leading-relaxed">
-            <span className="text-white font-bold">Genius, at the point of sale: </span>
-            Tour-Lo is not just a tool — it’s the new language of real estate.
-            It helps to present with <span className="text-white font-bold">precision, emotion, and confidence.</span>
-            With interactive storytelling and jaw-dropping visuals, <br /> it sells experiences, not just homes.
-            Your pitch just got sharper, faster, and smarter.
-          </p>
-
-          <a
-            href="#"
-            className="mt-4 inline-block text-sm sm:text-base font-medium bg-clip-text text-transparent bg-[#51b8ff] hover:opacity-90"
-          >
-            A seamless, cinematic, tap-and-glide sales experience ›
-          </a>
-        </div>
-
-        {/* Mockup cards slider (each video has its own card) */}
+        <GridHeader />
         <div className="px-4 sm:px-8 pb-20">
-          {/* Viewport (masks the sliding cards) */}
-          <div className="relative mx-auto max-w-4xl overflow-hidden">
-            {/* Horizontal track */}
-            <motion.div
-              className="flex w-full"
-              animate={{ x: `-${active * 100}%` }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              style={{ willChange: "transform" }}
-            >
-              {TABS.map((tab) => (
-                // Padding here creates visible spacing between slides,
-                // while each slide still occupies 100% width for the transform math.
-                <div key={tab.label} className="w-full shrink-0 px-4 sm:px-6">
-                  {/* Each slide is its OWN container/card */}
-                  <div className="rounded-2xl overflow-hidden">
-                    <video
-                      src={tab.src}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      width={1600}
-                      height={900}
-                      className="block w-full h-auto"
-                    />
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Tabs */}
-          <div className="mt-16 flex flex-col items-center">
-            <nav className="flex items-center gap-8 text-sm sm:text-base">
-              {TABS.map((tab, idx) => {
-                const isActive = idx === active;
-                return (
-                  <button
-                    key={tab.label}
-                    type="button"
-                    onClick={() => handleTab(idx)}
-                    className={`relative font-medium ${
-                      isActive
-                        ? "text-white"
-                        : "text-white/60 hover:text-white transition"
-                    }`}
-                  >
-                    {tab.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="tab-underline"
-                        className="absolute -bottom-2 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-cyan-500 to-cyan-300"
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 40,
-                        }}
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="mt-3 text-center max-w-2xl text-xs sm:text-sm text-white/65">
-              Writing Tools can proofread your text and rewrite different
-              versions until the tone and wording are just right, and
-              summarize selected text with a click.
-            </div>
-
-            <div className="mt-4 h-[2px] w-32 rounded-full bg-#00FFFF" />
-          </div>
+          <VideoSlider tabs={TABS} active={active} />
+          <SliderTabs tabs={TABS} active={active} onTabClick={setActive} />
         </div>
       </div>
     </section>
