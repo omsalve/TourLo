@@ -172,17 +172,18 @@ export default function Hero() {
             {/* Card */}
             <div className="relative w-full max-w-[80vw] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden y-translate-[-200px]">
               <video
-                // Add the ref to the video element
-                ref={videoRef}
-                src="/videos/promo.mp4"
-                poster="/images/video-poster.jpg"
-                className="w-full h-full object-cover"
-                // Remove autoPlay attribute
-                muted
-                loop
-                playsInline
-                preload="metadata"
-              />
+  // Add the ref to the video element
+  ref={videoRef}
+  src="/videos/promo.mp4"
+  poster="/images/video-poster.jpg"
+  className="w-full h-full object-cover"
+  // Add the controls attribute to show the play button
+  controls
+  muted
+  // Remove the loop attribute
+  playsInline
+  preload="metadata"
+/>
             </div>
           </motion.div>
         </section>
