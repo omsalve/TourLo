@@ -1,18 +1,15 @@
 import React from 'react';
-import Prism from './Prism';
 
+// This is the updated Footer component
 export default function Footer() {
   return (
     <footer className="relative w-full h-auto py-12 px-6 flex items-center justify-start text-white bg-transparent">
       
-     
-
-
       {/* --- CONTENT WRAPPER --- */}
-      <div className="relative z-10 w-full flex items-center justify-start">
+      {/* Changed to justify-between to create space for right-side content */}
+      <div className="relative z-10 w-full flex items-start justify-between">
         
-        {/* --- Main Content --- */}
-        {/* Removed the text-center class from this wrapper div */}
+        {/* --- Left Content (TOUR-LO Block) --- */}
         <div>
           <div className="mb-4">
             <h1 className="text-3xl font-bold leading-tight md:text-5xl">TOUR-LO</h1>
@@ -25,8 +22,31 @@ export default function Footer() {
           </p>
         </div>
 
+        {/* --- NEW Right Content Container --- */}
+        {/* This flex container holds the two new text sections */}
+        <div className="flex gap-16 mt-[10px]">
+          
+          {/* Section 1: Contact Info */}
+          <div className="text-sm text-right text-gray-300 flex flex-col gap-2">
+            <h3 className="font-bold text-white mb-2">CONTACT</h3>
+            <span>Mumbai, Maharashtra</span>
+            <span>info@tourlo.in</span>
+            <span>+91 12345 67890</span>
+          </div>
+
+          {/* Section 2: Social Links */}
+          <div className="text-sm text-right text-gray-300 flex flex-col gap-2">
+            <h3 className="font-bold text-white mb-2">FOLLOW US</h3>
+            <a href="#" className="hover:text-white transition-colors">Instagram</a>
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+          </div>
+
+        </div>
+
       </div>
       
     </footer>
   );
 }
+
