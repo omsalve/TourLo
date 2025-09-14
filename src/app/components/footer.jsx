@@ -30,8 +30,8 @@ export default function Footer() {
           <div className="text-sm text-right text-gray-300 flex flex-col gap-2">
             <h3 className="font-bold text-white mb-2">CONTACT</h3>
             <span>Mumbai, Maharashtra</span>
-            <span>info@tourlo.in</span>
-            <span>+91 12345 67890</span>
+            <span>connect@tourlo.in</span>
+            <span>+91 99231 94118</span>
           </div>
 
           {/* Section 2: Social Links */}
