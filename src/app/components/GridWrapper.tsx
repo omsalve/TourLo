@@ -20,17 +20,15 @@ const TABS: Tab[] = [
 
 // --- Sub-components ---
 
-/**
- * Renders the main heading and descriptive text for the section.
- */
 const GridHeader = () => (
-  <div className="px-6 sm:px-10 lg:px-16 pt-28 pb-16 text-center">
-    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
-      <span className="whitespace-nowrap bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
+  <div className="px-6 sm:px-10 lg:px-16 pt-[100px] sm:pt-[150px] lg:pt-[200px] pb-12 sm:pb-16 text-center">
+    <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
+      <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-cyan-300">
         Tour-Lo Third-Eye.
       </span>{" "}
-      <br className="hidden sm:block" />
-      <span className="text-5xl font-semibold tracking-normal">
+      {/* CORRECTED: Removed all classes from the <br> tag to make it permanent. */}
+      <br />
+      <span className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-normal">
         Nothing gets missed.
       </span>
     </h1>
@@ -51,11 +49,8 @@ const GridHeader = () => (
   </div>
 );
 
-/**
- * Renders the horizontally scrolling video slider.
- */
 const VideoSlider = ({ tabs, active }: { tabs: Tab[]; active: number }) => (
-  <div className="relative mx-auto max-w-4xl overflow-hidden">
+  <div className="relative mx-auto max-w-5xl overflow-hidden">
     <motion.div
       className="flex w-full"
       animate={{ x: `-${active * 100}%` }}
@@ -82,9 +77,6 @@ const VideoSlider = ({ tabs, active }: { tabs: Tab[]; active: number }) => (
   </div>
 );
 
-/**
- * Renders the clickable tabs to control the slider.
- */
 const SliderTabs = ({
   tabs,
   active,
@@ -94,8 +86,8 @@ const SliderTabs = ({
   active: number;
   onTabClick: (index: number) => void;
 }) => (
-  <div className="mt-16 flex flex-col items-center">
-    <nav className="flex items-center gap-8 text-sm sm:text-base">
+  <div className="mt-12 sm:mt-16 flex flex-col items-center">
+    <nav className="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 sm:gap-x-8 text-sm sm:text-base">
       {tabs.map((tab, idx) => {
         const isActive = idx === active;
         return (
@@ -121,7 +113,6 @@ const SliderTabs = ({
         );
       })}
     </nav>
-   
   </div>
 );
 
@@ -131,10 +122,10 @@ export default function GridWrapper() {
   const [active, setActive] = useState(0);
 
   return (
-    <section className="relative mx-auto translate-y-[-200px] max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
+    <section className="relative mx-auto -translate-y-[100px] sm:-translate-y-[150px] lg:-translate-y-[200px] max-w-6xl p-[2px] rounded-[28px] bg-[linear-gradient(180deg,#333,#fff)]">
       <div className="relative rounded-[26px] bg-black/80 text-white overflow-hidden">
         <GridHeader />
-        <div className="px-4 sm:px-8 pb-20">
+        <div className="px-2 sm:px-8 pb-12 sm:pb-20">
           <VideoSlider tabs={TABS} active={active} />
           <SliderTabs tabs={TABS} active={active} onTabClick={setActive} />
         </div>

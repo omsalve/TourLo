@@ -35,7 +35,7 @@ export default function AllDay() {
       <div className="relative w-full max-w-[1300px] aspect-[16/9] rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,.45)] overflow-hidden">
         {/* Text overlay */}
         <div className="absolute top-0 left-0 z-10 p-4 md:p-6">
-          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-left leading-tight">
+          <h1 className="text-xl md:text-2xl lg:text-7xl font-bold text-left leading-tight">
             We can do this{" "}
             <span className="relative inline-flex overflow-hidden align-baseline pb-1">
               <AnimatePresence mode="wait">

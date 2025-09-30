@@ -95,71 +95,64 @@ export default function Hero() {
 
       {/* PAGE CONTENT */}
       <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-6 text-white">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute left-8 top-1"
-          >
-            <Image
-              src="/images/logos/logo.png"
-              alt="Logo"
-              width={150}
-              height={200}
-              priority
-            />
-          </motion.div>
+       {/* Hero Section */}
+{/* Hero Section */}
+<section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-4 sm:px-6 text-white text-center">
+  {/* Logo */}
+  <motion.div
+    initial={{ opacity: 0, y: -50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}
+    className="absolute left-4 sm:left-8 top-2 sm:top-4"
+  >
+    <Image
+      src="/images/logos/logo.png"
+      alt="Logo"
+      width={120}
+      height={160}
+      className="w-24 sm:w-36 lg:w-44 h-auto"
+      priority
+    />
+  </motion.div>
 
-          {/* Contact Button */}
-          <motion.a
-            href="#contact-us"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="absolute right-6 top-4 cursor-pointer rounded-lg bg-transparent px-5 py-2 text-white/70 transition hover:text-white sm:px-6 sm:py-3"
-          >
-            CONTACT US
-          </motion.a>
+  {/* Contact Button */}
+  <motion.a
+    href="#contact-us"
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3, duration: 0.8 }}
+    className="absolute right-4 sm:right-6 top-3 sm:top-4 cursor-pointer rounded-lg bg-transparent px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-white/70 transition hover:text-white"
+  >
+    CONTACT US
+  </motion.a>
 
-          {/* Hero Text */}
-          <motion.div
-            style={{ marginLeft: "-200px" }}
-            className="w-full max-w-5xl flex flex-col items-start space-y-8 text-center sm:text-left"
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
-          >
-            <motion.h1
-              className="font-extrabold leading-tight text-3xl sm:text-[clamp(2rem,6vw,4rem)]"
-              variants={fadeInUp}
-            >
-              Let’s Think <br /> Beyond the Brochure.
-            </motion.h1>
+  {/* Hero Content */}
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}
+    className="max-w-3xl flex flex-col items-center justify-center text-center"
+  >
+    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight">
+      Let’s Think <br /> Beyond the Brochure.
+    </h1>
 
-            <motion.button
-              className="rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 py-3 transition"
-              variants={fadeInUp}
-              onClick={() => {
-                document.getElementById("promo")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Watch Video →
-            </motion.button>
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="mt-8 rounded-md bg-sky-500 px-7 py-3 text-base sm:text-lg font-semibold text-white shadow-lg transition hover:bg-sky-600"
+    >
+      Watch Video →
+    </motion.button>
 
+    <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-300">
+      Tour-Lo helps you sell smarter, close faster. <br />
+      Built to turn brochures into immersive experiences. <br />
+      A simple tool that makes selling unforgettable.
+    </p>
+  </motion.div>
+</section>
 
-            <motion.p
-              className="max-w-2xl text-base leading-relaxed text-gray-300 sm:text-lg"
-              variants={fadeInUp}
-            >
-              Tour-Lo helps you sell smarter, close faster. <br />
-              Built to turn brochures into immersive experiences. <br />A simple
-              tool that makes selling unforgettable.
-            </motion.p>
-          </motion.div>
-        </section>
         {/* Video Card Section */}
         <section id="promo" className="relative w-full py-12" >
           <motion.div
@@ -189,38 +182,45 @@ export default function Hero() {
         </section>
 
         {/* What We Do (aligned to Hero text) */}
-        <motion.section
-          style={{ marginLeft: "75px" }}
-          className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={{
-            visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-            hidden: { opacity: 0, y: 50 },
-          }}
-        >
-          <div className="mx-auto w-full max-w-5xl px-6">
-            <div style={{ marginLeft: "-200px" }}>
-              <motion.h1
-                className="mb-6 max-h-[200px] text-4xl font-bold leading-tight md:text-6xl overflow-hidden"
-                initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
-                animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
-                transition={{
-                  duration: 2, // slow + cinematic
-                  ease: "easeInOut",
-                }}
-              >
-                We&apos;re Redefining <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent"
-                >Real Estate Sales.</span>
-              </motion.h1>
+<motion.section
+  className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white text-center"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, amount: 0.2 }}
+  variants={{
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+    hidden: { opacity: 0, y: 50 },
+  }}
+>
+  <div className="mx-auto w-full max-w-5xl px-6">
+    <motion.h1
+      // Reduced the base font size slightly to ensure the longest line fits on all phones.
+      className="mb-6 font-bold leading-tight text-4xl sm:text-4xl md:text-5xl lg:text-6xl text-center"
+      initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+      animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+      }}
+    >
+      {/* Line 1: Wrapped in a span to prevent it from breaking */}
+      <span className="whitespace-nowrap">We&apos;re Redefining</span>
 
-              <div className="w-full max-w-3xl text-left">
-                <ScrollBrightText sentence="From interactive walkthroughs to unit-level interaction—Tour-Lo helps buyers decide faster, and developers close quicker." />
-              </div>
-            </div>
-          </div>
-        </motion.section>
+      {/* This <br> only appears on mobile, creating the two-line layout */}
+      <br className="sm:hidden" />
+      {' '}
+
+      {/* Line 2: The colored text, also prevented from breaking */}
+      <span className="whitespace-nowrap bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">
+        Real Estate Sales.
+      </span>
+    </motion.h1>
+
+    <div className="w-full max-w-3xl mx-auto">
+      <ScrollBrightText sentence="From interactive walkthroughs to unit-level interaction—Tour-Lo helps buyers decide faster, and developers close quicker." />
+    </div>
+  </div>
+</motion.section>
 
         <section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
           <div
