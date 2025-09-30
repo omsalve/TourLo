@@ -64,28 +64,30 @@ const ScrollBrightText = ({ sentence = "", className = "" }) => {
     // - Vertical margin is reduced on mobile (`my-24`) and larger on desktop (`md:my-48`).
     // - Text is centered and has a max-width for better readability on large screens.
     <p
-      ref={containerRef}
-      className={`
-        text-center 
-        text-xl leading-relaxed 
-        sm:text-2xl 
-        md:text-3xl md:leading-loose 
-        my-24 md:my-48 mx-auto
-        max-w-4xl
-        ${className}
-      `}
+  ref={containerRef}
+  className={`
+    text-center 
+    text-xl leading-relaxed 
+    sm:text-2xl 
+    md:text-3xl md:leading-loose 
+    my-24 md:my-48
+    max-w-4xl
+    mx-auto md:mx-0
+    md:text-left
+    ${className}
+  `}
+>
+  {sentence.split(" ").map((word, index) => (
+    <span
+      key={index}
+      className="word"
+      style={{ marginRight: "8px", display: "inline-block" }}
     >
-      {sentence.split(" ").map((word, index) => (
-        <span
-          key={index}
-          className="word"
-          // This inline style is fine as it controls word spacing, not overall layout.
-          style={{ marginRight: "8px", display: "inline-block" }}
-        >
-          {word}
-        </span>
-      ))}
-    </p>
+      {word}
+    </span>
+  ))}
+</p>
+
   );
 };
 

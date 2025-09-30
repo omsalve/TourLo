@@ -97,7 +97,7 @@ export default function Hero() {
       <div className="relative z-10">
        {/* Hero Section */}
 {/* Hero Section */}
-<section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-4 sm:px-6 text-white text-center">
+<section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-4 sm:px-6 text-white text-center md:items-start md:text-left md:pl-[150px]">
   {/* Logo */}
   <motion.div
     initial={{ opacity: 0, y: -50 }}
@@ -127,30 +127,33 @@ export default function Hero() {
   </motion.a>
 
   {/* Hero Content */}
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 1 }}
-    className="max-w-3xl flex flex-col items-center justify-center text-center"
+  {/* Hero Content */}
+<motion.div
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+  className="max-w-3xl flex flex-col justify-center items-center text-center 
+             md:items-start md:text-left"
+>
+  <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight">
+    Let’s Think <br className="block md:hidden" /> Beyond the Brochure.
+  </h1>
+
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="mt-8 rounded-md bg-sky-500 px-7 py-3 text-base sm:text-lg font-semibold text-white shadow-lg transition hover:bg-sky-600 md:self-start"
   >
-    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight">
-      Let’s Think <br /> Beyond the Brochure.
-    </h1>
+    Watch Video →
+  </motion.button>
 
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="mt-8 rounded-md bg-sky-500 px-7 py-3 text-base sm:text-lg font-semibold text-white shadow-lg transition hover:bg-sky-600"
-    >
-      Watch Video →
-    </motion.button>
+  <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-300">
+    Tour-Lo helps you sell smarter, close faster. <br className="block md:hidden" />
+    Built to turn brochures into immersive experiences. <br className="block md:hidden" />
+    A simple tool that makes selling unforgettable.
+  </p>
+</motion.div>
 
-    <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-300">
-      Tour-Lo helps you sell smarter, close faster. <br />
-      Built to turn brochures into immersive experiences. <br />
-      A simple tool that makes selling unforgettable.
-    </p>
-  </motion.div>
 </section>
 
         {/* Video Card Section */}
@@ -181,9 +184,8 @@ export default function Hero() {
           </motion.div>
         </section>
 
-        {/* What We Do (aligned to Hero text) */}
-<motion.section
-  className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white text-center"
+       <motion.section
+  className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white text-center md:items-start md:text-left md:pl-[150px]"
   initial="hidden"
   whileInView="visible"
   viewport={{ once: true, amount: 0.2 }}
@@ -192,10 +194,9 @@ export default function Hero() {
     hidden: { opacity: 0, y: 50 },
   }}
 >
-  <div className="mx-auto w-full max-w-5xl px-6">
+  <div className="w-full max-w-5xl md:max-w-none">
     <motion.h1
-      // Reduced the base font size slightly to ensure the longest line fits on all phones.
-      className="mb-6 font-bold leading-tight text-4xl sm:text-4xl md:text-5xl lg:text-6xl text-center"
+      className="mb-6 font-bold leading-tight text-4xl sm:text-4xl md:text-5xl lg:text-6xl text-center md:text-left"
       initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
       animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
       transition={{
@@ -203,24 +204,19 @@ export default function Hero() {
         ease: "easeInOut",
       }}
     >
-      {/* Line 1: Wrapped in a span to prevent it from breaking */}
       <span className="whitespace-nowrap">We&apos;re Redefining</span>
-
-      {/* This <br> only appears on mobile, creating the two-line layout */}
-      <br className="sm:hidden" />
-      {' '}
-
-      {/* Line 2: The colored text, also prevented from breaking */}
+      <br className="sm:hidden" />{' '}
       <span className="whitespace-nowrap bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">
         Real Estate Sales.
       </span>
     </motion.h1>
 
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl md:max-w-full text-center md:text-left">
       <ScrollBrightText sentence="From interactive walkthroughs to unit-level interaction—Tour-Lo helps buyers decide faster, and developers close quicker." />
     </div>
   </div>
 </motion.section>
+
 
         <section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
           <div
