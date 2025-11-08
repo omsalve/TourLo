@@ -24,28 +24,35 @@ export default function Hero() {
   const videoRef = useRef(null);
   const videoSectionRef = useRef(null);
 
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          videoElement
-            .play()
-            .catch((error) =>
-              console.error("Video play failed:", error)
-            );
-        } else {
-          videoElement.pause();
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        // Only play if it's not already playing
+        if (video.paused) {
+          video.play().catch((err) => {
+            if (err.name !== "AbortError") console.warn("Video play error:", err);
+          });
         }
-      },
-      { threshold: 1.0 }
-    );
+      } else {
+        // Give a slight delay before pausing to avoid flicker
+        setTimeout(() => {
+          if (!entry.isIntersecting && !video.paused) {
+            video.pause();
+          }
+        }, 250);
+      }
+    },
+    { threshold: 0.6 } // play when 60% of video is visible instead of full 100%
+  );
 
-    observer.observe(videoElement);
-    return () => observer.disconnect();
-  }, []);
+  observer.observe(video);
+  return () => observer.disconnect();
+}, []);
+
 
   const scrollToVideo = () => {
     videoSectionRef.current?.scrollIntoView({ behavior: "smooth" });
