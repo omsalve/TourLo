@@ -35,9 +35,32 @@ export default function Footer() {
           {/* Section 2: Social Links */}
           <div className="text-sm text-gray-300 flex flex-col gap-2">
             <h3 className="font-bold text-white mb-2">FOLLOW US</h3>
-            <a href="#" className="hover:text-white transition-colors">Instagram</a>
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+<a 
+  href="https://www.instagram.com/tourlo_india/" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="hover:text-white transition-colors"
+>
+  Instagram
+</a>
+
+<a 
+  href="https://x.com/TourLoIn" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="hover:text-white transition-colors"
+>
+  Twitter
+</a>
+
+<a 
+  href="https://www.linkedin.com/company/tourlo" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="hover:text-white transition-colors"
+>
+  LinkedIn
+</a>
           </div>
         </div>
       </div>
