@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Tour-Lo",
   description: "Think beyond the brochure.",
+  icons: {
+    icon: [
+      { url: "/images/logos/logowhite.png", type: "image/png" }
+    ],
+    shortcut: "/images/logos/logowhite.png",
+  },
 };
 
 export default function RootLayout({
