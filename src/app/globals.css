@@ -1,11 +1,11 @@
+/* Optional webfont */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
 /* Tailwind (single import) */
 @import "tailwindcss";
 
 /* 3rd-party animations (keep after Tailwind) */
 @import "tw-animate-css";
-
-/* Optional webfont */
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 /* Dark variant helper (Tailwind v4 style) */
 @custom-variant dark (&:is(.dark *));

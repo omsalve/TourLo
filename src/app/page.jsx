@@ -145,7 +145,7 @@ useEffect(() => {
         <section
           id="promo"
           ref={videoSectionRef}
-          className="relative w-full py-12"
+          className="relative w-full py-6 md:py-12"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -204,28 +204,28 @@ useEffect(() => {
         </motion.section>
 
         {/* ---------------- GRID SECTIONS ---------------- */}
-        <section className="relative z-20 w-full my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
+        <section className="relative z-20 w-full my-20 md:my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
           <div
             id="grid-wrapper-container"
-            className="relative mx-auto max-w-7xl px-6 -translate-y-10 md:-translate-y-16 lg:-translate-y-24"
+            className="relative mx-auto max-w-7xl px-6 -translate-y-5 md:-translate-y-10 lg:-translate-y-16"
           >
             <BentoGridSecondDemo />
           </div>
         </section>
 
-        <section className="-mt-24 md:-mt-32 lg:-mt-48">
+        <section className="-mt-12 md:-mt-24 lg:-mt-48">
           <GridWrapper />
         </section>
 
         {/* ---------------- ALL DAY ALL NIGHT SECTION ---------------- */}
-        <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white mt-12 md:mt-16 lg:mt-20">
+        <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white -mt-60 md:mt-12 lg:mt-20">
           <AllDay />
         </section>
 
         {/* ---------------- CONTACT SECTION ---------------- */}
         <motion.section
           id="contact-us"
-          className="relative flex min-h-screen w-full items-center justify-center px-6 text-white"
+          className="relative flex min-h-screen w-full items-center justify-center px-6 text-white -mt-80 md:mt-12 lg:mt-20"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}
           viewport={{ once: true }}
@@ -237,7 +237,7 @@ useEffect(() => {
       </div>
 
       {/* ---------------- FOOTER ---------------- */}
-      <section>
+      <section className="-mt-40 md:mt-12 lg:mt-20">
         <Footer />
       </section>
 
