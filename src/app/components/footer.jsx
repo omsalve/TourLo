@@ -17,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
           <p className="text-xs text-gray-400">
-            A Technology Initiative by Pixpective - 2025 tourlo.in
+            A Technology Initiative by Techinfinity - 2025 tourlo.in
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function Footer() {
             <h3 className="font-bold text-white mb-2">CONTACT</h3>
             <span>Mumbai, Maharashtra</span>
             <span>connect@tourlo.in</span>
-            <span>+91 99231 94118</span>
+            <span>+91 98333 88717</span>
           </div>
 
           {/* Section 2: Social Links */}
