@@ -17,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
           <p className="text-xs text-gray-400">
-            A Technology Initiative by Techinfinity - 2025 tourlo.in
+            A Technology Initiative by Techinfinity - 2026 tourlo.in
           </p>
         </div>
 
