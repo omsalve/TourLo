@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
 
 function SuccessIcon() {
   return (
@@ -9,7 +11,7 @@ function SuccessIcon() {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className="relative mx-auto mb-8 flex h-28 w-28 items-center justify-center"
+      className="relative mx-auto flex items-center justify-center thankyou-check-wrap"
     >
       <motion.div
         className="absolute inset-0 rounded-full border border-cyan-300/80"
@@ -37,36 +39,44 @@ function SuccessIcon() {
 
 function DocumentIcon() {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className="thankyou-step-icon">
-      <path d="M10 7.5h8l6 6v11.5a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-15.5a2 2 0 0 1 2-2Z" />
-      <path d="M18 7.5v6h6" />
-      <path d="M12 18h8" />
-      <path d="M12 22h8" />
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="thankyou-step-icon">
+      <path d="M6.5 3h7.2L18 7.3V20a1 1 0 0 1-1 1H6.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+      <path d="M13.7 3v4.3H18" />
+      <path d="M7.8 12.2h5.4" />
+      <path d="M7.8 15.4h3.6" />
+      <circle cx="16.3" cy="16.3" r="2.35" />
+      <path d="M15.3 16.3l.7.7 1.3-1.5" />
     </svg>
   );
 }
 
 function TeamIcon() {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className="thankyou-step-icon">
-      <path d="M9 23.5a5 5 0 1 1 10 0" />
-      <path d="M17 23.5a5 5 0 1 1 10 0" />
-      <path d="M10.5 13a4 4 0 1 1 8 0" />
-      <path d="M18.5 12.5a4 4 0 1 1 8 0" />
-      <path d="M13 19.5h5.5" />
-      <path d="M20.5 19.5h5.5" />
+    <svg viewBox="0 0 32 24" aria-hidden="true" className="thankyou-step-icon">
+      <g className="thankyou-icon-muted">
+        <circle cx="11.3" cy="7.6" r="4" />
+        <path d="M4 21c0-4 3.3-6.9 7.3-6.9s6 1.6 6.9 4" />
+      </g>
+      <g className="thankyou-icon-accent">
+        <circle cx="20.7" cy="10.4" r="3.3" />
+        <path d="M14.3 21c0-3.6 3-6.1 6.4-6.1S27 17.4 27 21" />
+      </g>
     </svg>
   );
 }
 
 function BuildIcon() {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className="thankyou-step-icon">
-      <path d="M15 8.5 9 21.5l6.5 5.5 6-13.5Z" />
-      <path d="M9 21.5h13" />
-      <path d="M12.5 14.5h7" />
-      <path d="M15.5 10.5V8.5" />
-      <path d="M18.5 26.5l5.5-5.5" />
+    <svg viewBox="0 0 32 22" aria-hidden="true" className="thankyou-step-icon">
+      <path
+        className="thankyou-icon-muted"
+        d="M9.6 14.4c-2.4 0-4.3-1.8-4.3-4.1 0-2 1.5-3.7 3.5-4 .6-2.1 2.5-3.6 4.8-3.6 2.6 0 4.8 2 5.1 4.5h.3c2 0 3.6 1.6 3.6 3.5 0 .5-.1 1-.3 1.5"
+      />
+      <path
+        className="thankyou-icon-accent"
+        d="M18.4 9.9c1.9 0 3.4 1.4 3.4 3.2s-1.5 3.2-3.4 3.2h-7c-2 0-3.7-1.5-3.7-3.4 0-1.7 1.3-3.1 3-3.3"
+      />
+      <circle className="thankyou-icon-accent" cx="25.4" cy="15.4" r="2.4" />
     </svg>
   );
 }
@@ -94,32 +104,43 @@ export default function ThankYouPage() {
       transition={{ duration: 0.45, ease: "easeOut" }}
       className="thankyou-shell"
     >
-      <div className="thankyou-bg" />
-      <div className="thankyou-wave" aria-hidden="true">
-        <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
-          <path d="M0,185 C170,120 260,130 390,175 S670,180 760,150 S1160,80 1440,165 L1440,220 L0,220 Z" />
-          <path d="M0,200 C140,165 260,145 370,176 S670,198 788,175 S1180,117 1440,190" />
-        </svg>
+      <div className="thankyou-bg-layer" aria-hidden="true">
+        <Threads
+          amplitude={1}
+          distance={0}
+          enableMouseInteraction={true}
+          style={{ width: "100%", height: "100%" }}
+        />
       </div>
 
       <div className="thankyou-container">
-        <div className="thankyou-logo">TOUR•LO</div>
+        <div className="thankyou-logo">
+          <Image
+            src="/images/logos/logo.png"
+            alt="TourLo"
+            width={140}
+            height={186}
+            className="thankyou-logo-img"
+            priority
+          />
+        </div>
 
         <div className="thankyou-content">
           <SuccessIcon />
 
           <h1 className="thankyou-heading">Thank You!</h1>
 
-          <p className="thankyou-copy">
-            We’ve received your message and our team will get back to you shortly.
-          </p>
-          <p className="thankyou-copy">
-            We’re excited to connect with you and explore how TOURLO can help bring your real estate vision to life.
-          </p>
+          <div className="thankyou-box-wrapper">
+            <p className="thankyou-copy">
+              We've received your message and our team will get back to you shortly.
+            </p>
+            <p className="thankyou-copy">
+              We're excited to connect with you and explore how <span className="thankyou-copy-accent">TOURLO</span> can help bring your real estate vision to life.
+            </p>
 
-          <div className="thankyou-divider" />
+            <div className="thankyou-divider" />
 
-          <section className="thankyou-next">
+            <section className="thankyou-next">
             <h2>What’s Next?</h2>
             <div className="thankyou-steps">
               {steps.map((step, index) => (
@@ -131,9 +152,10 @@ export default function ThankYouPage() {
             </div>
           </section>
 
-          <Link href="/" className="thankyou-cta" aria-label="Back to Home">
-            Back to Home <span aria-hidden="true">→</span>
-          </Link>
+            <Link href="/" className="thankyou-cta" aria-label="Back to Home">
+              Back to Home <span aria-hidden="true">→</span>
+            </Link>
+          </div>
 
           <div className="thankyou-support">
             <p className="thankyou-support-title">Need immediate assistance?</p>
