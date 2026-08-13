@@ -54,8 +54,8 @@ export default function CTA() {
         Tour-Lo is the only tool you need to sell smarter.
       </p>
 
-      {/* Button → Goes to the contact section on the homepage */}
-      <Link href="/#contact-us">
+      {/* Button → Goes to ContactUs page */}
+      <Link href="/ContactUs">
         <button className="bg-gradient-to-r from-cyan-500 to-cyan-300 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base rounded-full font-semibold hover:scale-105 transition-transform">
           BOOK A DEMO →
         </button>

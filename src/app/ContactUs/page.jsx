@@ -1,13 +1,242 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
+import ThankYouPage from "../components/ThankYouPage";
 
 export default function ContactUs() {
+  const THANK_YOU_HASH = "#contact-us/thankyou";
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [showThankYou, setShowThankYou] = useState(() =>
+    typeof window !== "undefined" && window.location.hash === THANK_YOU_HASH
+  );
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.location.replace("/#contact-us");
-    }
+    const isThankYouHash = window.location.hash === THANK_YOU_HASH;
+    setShowThankYou(isThankYouHash);
+
+    const handleHashChange = () => {
+      setShowThankYou(window.location.hash === THANK_YOU_HASH);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  return null;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setResponseMessage("");
+
+    const nextErrors = {};
+    if (!fullName.trim()) nextErrors.fullName = "Full name is required.";
+    if (!email.trim()) nextErrors.email = "Email is required.";
+    else if (!/^\S+@\S+\.\S+$/.test(email))
+      nextErrors.email = "Enter a valid email.";
+
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fullName, email, phone, message }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setResponseMessage("Your message was sent successfully! We'll be in touch soon.");
+        setFullName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
+        setErrors({});
+        setShowThankYou(true);
+        window.location.assign(`/#${THANK_YOU_HASH.slice(1)}`);
+      } else {
+        setResponseMessage(data.message || "Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+      setResponseMessage("Failed to submit form. Please check your network and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (showThankYou) {
+    return <ThankYouPage />;
+  }
+
+  const inputBase =
+    "w-full p-3 rounded-lg bg-black/40 text-white focus:outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-white/60 transition";
+  const errorRing = "ring-red-500/60 focus:ring-red-400";
+
+  return (
+    <div className="relative min-h-screen flex flex-col">
+      <div className="absolute inset-0 -z-10 bg-black">
+        <Threads
+          amplitude={1}
+          distance={0}
+          enableMouseInteraction={true}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col min-h-screen"
+      >
+        <div className="flex-1 bg-transparent flex flex-col px-8 py-6">
+          <div className="flex justify-start">
+            <Image
+              src="/images/logos/logo.png"
+              alt="Logo"
+              width={70}
+              height={70}
+              className="object-contain"
+              priority
+            />
+          </div>
+
+          <div className="flex-1 flex flex-col items-center justify-center text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Let’s Talk <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">Real Estate Innovation</span>
+            </h1>
+            <p className="text-white/80 max-w-lg">
+              Whether you’re a real estate developer, marketing agency, or sales
+              lead – we’re here to help you turn walkthroughs into conversions.
+              Reach out to book a demo, ask a question, or just say hi.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex-1 bg-transparent flex items-center justify-center px-4">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="
+              relative w-full max-w-2xl mt-[-50px]
+              rounded-2xl border border-white/5
+              bg-white/10 backdrop-blur-sm backdrop-saturate-50
+              supports-[backdrop-filter]:bg-white/5
+              p-8 shadow-[0_8px_40px_rgba(0,0,0,0.2)]
+            "
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="col-span-1 md:col-span-2">
+                <label htmlFor="fullName" className="block text-white mb-2">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className={`${inputBase} ${errors.fullName ? errorRing : ""}`}
+                  placeholder="John Doe"
+                  aria-invalid={!!errors.fullName}
+                  aria-describedby={
+                    errors.fullName ? "fullName-error" : undefined
+                  }
+                  autoComplete="name"
+                />
+                {errors.fullName && (
+                  <p id="fullName-error" className="mt-2 text-sm text-red-400">
+                    {errors.fullName}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="email" className="block text-white mb-2">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`${inputBase} ${errors.email ? errorRing : ""}`}
+                  placeholder="john@example.com"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  autoComplete="email"
+                />
+                {errors.email && (
+                  <p id="email-error" className="mt-2 text-sm text-red-400">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-white mb-2">
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className={inputBase}
+                  placeholder="+91 98765 43210"
+                  autoComplete="tel"
+                />
+              </div>
+            </div>
+
+            <div className="mb-5">
+              <label htmlFor="message" className="block text-white mb-2">
+                Message
+              </label>
+              <textarea
+                id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className={inputBase}
+                rows={4}
+                placeholder="Type your message..."
+              />
+            </div>
+
+            {responseMessage && (
+              <p
+                className={`text-center mb-4 ${
+                  responseMessage.includes("success") ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {responseMessage}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-cyan-300 rounded-lg font-semibold text-white transition-all
+                ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
+            >
+              {isSubmitting ? "Sending..." : "Send Message"}
+            </button>
+          </form>
+        </div>
+      </motion.div>
+    </div>
+  );
 }

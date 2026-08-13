@@ -24,13 +24,15 @@ const montserrat = Montserrat({
 export default function Hero() {
   const videoRef = useRef(null);
   const videoSectionRef = useRef(null);
+  const THANK_YOU_HASH = "#contact-us/thankyou";
+
   const [showThankYou, setShowThankYou] = useState(() =>
-    typeof window !== "undefined" && window.location.hash === "#contact-us/thankyou"
+    typeof window !== "undefined" && window.location.hash === THANK_YOU_HASH
   );
 
   useEffect(() => {
     const syncHashState = () => {
-      setShowThankYou(window.location.hash === "#contact-us/thankyou");
+      setShowThankYou(window.location.hash === THANK_YOU_HASH);
     };
 
     syncHashState();

@@ -1,13 +1,5 @@
-"use client";
-
-import { useEffect } from "react";
+import ThankYouPage from "../../components/ThankYouPage";
 
 export default function ThankYouRoute() {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.location.replace("/#contact-us/thankyou");
-    }
-  }, []);
-
-  return null;
+  return <ThankYouPage />;
 }
