@@ -118,8 +118,8 @@ export default function ThankYouPage() {
           <Image
             src="/images/logos/logo.png"
             alt="TourLo"
-            width={140}
-            height={186}
+            width={70}
+            height={70}
             className="thankyou-logo-img"
             priority
           />
@@ -175,15 +175,14 @@ export default function ThankYouPage() {
               <Image
                 src="/images/logos/instagramlogo.png"
                 alt="Instagram"
-                width={24}
-                height={24}
+                width={42}
+                height={42}
                 className="thankyou-social-logo"
               />
-              <span className="thankyou-social-handle">@tourlo_india</span>
             </a>
 
             <a
-              href="https://linkedin.com/company/tourlo_india"
+              href="https://linkedin.com/company/tourlo"
               target="_blank"
               rel="noopener noreferrer"
               className="thankyou-social"
@@ -192,11 +191,10 @@ export default function ThankYouPage() {
               <Image
                 src="/images/logos/linkedinlogo.png"
                 alt="LinkedIn"
-                width={24}
-                height={24}
+                width={42}
+                height={42}
                 className="thankyou-social-logo"
               />
-              <span className="thankyou-social-handle">@tourlo_india</span>
             </a>
           </div>
         </div>

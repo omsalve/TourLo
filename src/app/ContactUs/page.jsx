@@ -16,9 +16,7 @@ export default function ContactUs() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
-  const [showThankYou, setShowThankYou] = useState(() =>
-    typeof window !== "undefined" && window.location.hash === THANK_YOU_HASH
-  );
+  const [showThankYou, setShowThankYou] = useState(false);
 
   useEffect(() => {
     const isThankYouHash = window.location.hash === THANK_YOU_HASH;

@@ -26,9 +26,7 @@ export default function Hero() {
   const videoSectionRef = useRef(null);
   const THANK_YOU_HASH = "#contact-us/thankyou";
 
-  const [showThankYou, setShowThankYou] = useState(() =>
-    typeof window !== "undefined" && window.location.hash === THANK_YOU_HASH
-  );
+  const [showThankYou, setShowThankYou] = useState(false);
 
   useEffect(() => {
     const syncHashState = () => {
