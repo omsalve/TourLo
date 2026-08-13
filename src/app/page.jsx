@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Montserrat } from "next/font/google";
@@ -14,6 +14,7 @@ import GridWrapper from "./components/GridWrapper";
 import { BackgroundRippleEffect } from "@/cellgrid/ui/background-ripple-effect";
 import AllDay from "./components/alldayallnight";
 import { BentoGridSecondDemo } from "./components/2colgrid";
+import ThankYouPage from "./components/ThankYouPage";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -23,44 +24,58 @@ const montserrat = Montserrat({
 export default function Hero() {
   const videoRef = useRef(null);
   const videoSectionRef = useRef(null);
-
-useEffect(() => {
-  const video = videoRef.current;
-  if (!video) return;
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        // Only play if it's not already playing
-        if (video.paused) {
-          video.play().catch((err) => {
-            if (err.name !== "AbortError") console.warn("Video play error:", err);
-          });
-        }
-      } else {
-        // Give a slight delay before pausing to avoid flicker
-        setTimeout(() => {
-          if (!entry.isIntersecting && !video.paused) {
-            video.pause();
-          }
-        }, 250);
-      }
-    },
-    { threshold: 0.6 } // play when 60% of video is visible instead of full 100%
+  const [showThankYou, setShowThankYou] = useState(() =>
+    typeof window !== "undefined" && window.location.hash === "#contact-us/thankyou"
   );
 
-  observer.observe(video);
-  return () => observer.disconnect();
-}, []);
+  useEffect(() => {
+    const syncHashState = () => {
+      setShowThankYou(window.location.hash === "#contact-us/thankyou");
+    };
 
+    syncHashState();
+    window.addEventListener("hashchange", syncHashState);
+
+    return () => window.removeEventListener("hashchange", syncHashState);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (video.paused) {
+            video.play().catch((err) => {
+              if (err.name !== "AbortError") console.warn("Video play error:", err);
+            });
+          }
+        } else {
+          setTimeout(() => {
+            if (!entry.isIntersecting && !video.paused) {
+              video.pause();
+            }
+          }, 250);
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
 
   const scrollToVideo = () => {
     videoSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  if (showThankYou) {
+    return <ThankYouPage />;
+  }
+
   return (
     <div className="relative w-full min-h-screen overflow-hidden scroll-smooth">
-      {/* Background */}
       <ScrollProgressBar />
       <div
         className="fixed inset-0 z-0 bg-black"
@@ -79,11 +94,8 @@ useEffect(() => {
 
       <ScrollSplash />
 
-      {/* MAIN PAGE CONTENT */}
       <div className="relative z-10">
-        {/* ---------------- HERO SECTION ---------------- */}
         <section className="relative flex min-h-[85svh] w-full flex-col items-center justify-center px-4 sm:px-6 text-white text-center md:items-start md:text-left md:pl-[150px]">
-          {/* Logo */}
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +112,6 @@ useEffect(() => {
             />
           </motion.div>
 
-          {/* Contact Button */}
           <motion.a
             href="#contact-us"
             initial={{ opacity: 0, y: -20 }}
@@ -111,7 +122,6 @@ useEffect(() => {
             CONTACT US
           </motion.a>
 
-          {/* Hero Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,7 +133,6 @@ useEffect(() => {
               Brochure.
             </h1>
 
-            {/* Watch Video Button */}
             <motion.button
               onClick={scrollToVideo}
               whileHover={{ scale: 1.05 }}
@@ -141,7 +150,6 @@ useEffect(() => {
           </motion.div>
         </section>
 
-        {/* ---------------- PROMO VIDEO SECTION ---------------- */}
         <section
           id="promo"
           ref={videoSectionRef}
@@ -169,7 +177,6 @@ useEffect(() => {
           </motion.div>
         </section>
 
-        {/* ---------------- REDEFINING SALES SECTION ---------------- */}
         <motion.section
           className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 text-white text-center md:items-start md:text-left md:pl-[150px]"
           initial="hidden"
@@ -203,7 +210,6 @@ useEffect(() => {
           </div>
         </motion.section>
 
-        {/* ---------------- GRID SECTIONS ---------------- */}
         <section className="relative z-20 w-full my-20 md:my-50 -translate-y-[120px] md:-translate-y-[150px] lg:-translate-y-[230px]">
           <div
             id="grid-wrapper-container"
@@ -217,12 +223,10 @@ useEffect(() => {
           <GridWrapper />
         </section>
 
-        {/* ---------------- ALL DAY ALL NIGHT SECTION ---------------- */}
         <section className="relative z-10 flex items-center justify-center min-h-screen px-6 text-white -mt-60 md:mt-12 lg:mt-20">
           <AllDay />
         </section>
 
-        {/* ---------------- CONTACT SECTION ---------------- */}
         <motion.section
           id="contact-us"
           className="relative flex min-h-screen w-full items-center justify-center px-6 text-white -mt-80 md:mt-12 lg:mt-20"
@@ -236,12 +240,10 @@ useEffect(() => {
         </motion.section>
       </div>
 
-      {/* ---------------- FOOTER ---------------- */}
       <section className="-mt-40 md:mt-12 lg:mt-20">
         <Footer />
       </section>
 
-      {/* ---------------- SCROLLBAR HIDE ---------------- */}
       <style jsx global>{`
         #scrollstack,
         #scrollstack * {

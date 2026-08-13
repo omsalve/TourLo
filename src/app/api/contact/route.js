@@ -1,28 +1,37 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Handle POST requests to /api/contact
 export async function POST(request) {
   try {
-    // Parse the JSON body from the request
     const { fullName, email, phone, message } = await request.json();
 
-    // Validate the incoming data (optional but recommended)
     if (!fullName || !email) {
       return NextResponse.json({ message: 'Full name and email are required.' }, { status: 400 });
     }
 
-    // Configure the Nodemailer transporter using environment variables.
-    // Use an "App Password" for Gmail for security.
+    const isProduction = process.env.NODE_ENV === 'production';
+    const hasEmailConfig = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASS && process.env.EMAIL_RECEIVER);
+
+    if (!isProduction && !hasEmailConfig) {
+      console.warn('Local email preview mode: SMTP credentials missing. Form submission simulated successfully.');
+      return NextResponse.json({
+        message: 'Email sent successfully in local preview mode!',
+        preview: true,
+      }, { status: 200 });
+    }
+
+    if (!hasEmailConfig) {
+      return NextResponse.json({ message: 'Email configuration is missing. Please configure SMTP credentials.' }, { status: 500 });
+    }
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // You can use other services like 'Outlook', 'SendGrid', etc.
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_RECEIVER,
@@ -36,12 +45,9 @@ export async function POST(request) {
       `,
     };
 
-    // Send the email
     await transporter.sendMail(mailOptions);
 
-    // Return a success response
     return NextResponse.json({ message: 'Email sent successfully!' }, { status: 200 });
-
   } catch (error) {
     console.error('Error sending email:', error);
     return NextResponse.json({ message: 'Error sending email. Please try again.' }, { status: 500 });

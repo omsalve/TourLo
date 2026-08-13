@@ -202,3 +202,293 @@ h1 {
     opacity: 0.4;
   }
 }
+
+.thankyou-shell {
+  position: relative;
+  min-height: 100vh;
+  background: #02070d;
+  color: #e6faff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thankyou-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(23, 171, 220, 0.05), transparent 38%),
+    linear-gradient(180deg, rgba(2, 7, 13, 1) 0%, rgba(1, 3, 8, 1) 100%);
+}
+
+.thankyou-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 230px;
+  opacity: 0.34;
+  pointer-events: none;
+  filter: blur(0.5px);
+}
+
+.thankyou-wave svg {
+  width: 100%;
+  height: 100%;
+  fill: rgba(148, 163, 184, 0.16);
+}
+
+.thankyou-wave path:first-child {
+  fill: rgba(148, 163, 184, 0.18);
+}
+
+.thankyou-wave path:last-child {
+  fill: rgba(148, 163, 184, 0.08);
+}
+
+.thankyou-container {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 980px);
+  min-height: 100vh;
+  padding: 38px 24px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.thankyou-logo {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #f1fbff;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+.thankyou-logo::before {
+  content: "TOUR";
+  color: #64d9ff;
+}
+
+.thankyou-logo::after {
+  content: "•LO";
+  color: #64d9ff;
+}
+
+.thankyou-content {
+  width: min(100%, 760px);
+  margin: auto;
+  text-align: center;
+  padding-top: 12px;
+}
+
+.thankyou-check {
+  width: 118px;
+  height: 118px;
+  display: block;
+  overflow: visible;
+  stroke: #7de8ff;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.9));
+  animation: thankyou-check-draw 0.7s ease-out 0.2s both;
+}
+
+@keyframes thankyou-check-draw {
+  0% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.thankyou-heading {
+  margin: 10px 0 22px;
+  font-size: clamp(3.4rem, 5.8vw, 7rem);
+  line-height: 0.94;
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  color: #52d9fd;
+  text-shadow: 0 0 18px rgba(82, 217, 253, 0.28);
+}
+
+.thankyou-copy {
+  max-width: 710px;
+  margin: 0 auto;
+  color: rgba(228, 244, 255, 0.9);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  line-height: 1.38;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.thankyou-copy + .thankyou-copy {
+  margin-top: 18px;
+}
+
+.thankyou-divider {
+  width: min(100%, 540px);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), rgba(125, 232, 255, 0.35), rgba(148, 163, 184, 0.1));
+  margin: 32px auto 22px;
+}
+
+.thankyou-next {
+  margin-top: 18px;
+}
+
+.thankyou-next h2 {
+  font-size: clamp(1.7rem, 2.4vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  color: #aaf0ff;
+  margin: 0 0 22px;
+}
+
+.thankyou-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0 auto;
+  width: min(100%, 720px);
+}
+
+.thankyou-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-start;
+  min-height: 130px;
+  padding: 0 12px;
+}
+
+.thankyou-step-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(125, 232, 255, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(58, 214, 255, 0.18), 0 0 18px rgba(34, 211, 238, 0.08);
+  background: rgba(10, 19, 24, 0.2);
+}
+
+.thankyou-step-icon {
+  width: 34px;
+  height: 34px;
+  stroke: #74e7ff;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  opacity: 0.95;
+}
+
+.thankyou-step p {
+  color: rgba(228, 244, 255, 0.9);
+  font-size: 1.02rem;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  max-width: 190px;
+}
+
+.thankyou-cta {
+  width: min(100%, 540px);
+  margin: 28px auto 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0.85rem 1.2rem;
+  border-radius: 0.95rem;
+  background: linear-gradient(90deg, rgba(48, 210, 255, 0.97), rgba(18, 185, 230, 0.94));
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.25), inset 0 1px 0 rgba(255,255,255,0.25);
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #06131c;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.thankyou-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.38), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.thankyou-support {
+  margin-top: 24px;
+  color: rgba(228, 244, 255, 0.82);
+  text-align: center;
+}
+
+.thankyou-support-title {
+  color: rgba(228, 244, 255, 0.9);
+  font-size: 1.06rem;
+  margin: 0 0 10px;
+  font-weight: 500;
+}
+
+.thankyou-support p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: rgba(228, 244, 255, 0.8);
+}
+
+.thankyou-support a {
+  color: #6ee3ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .thankyou-container {
+    padding-top: 24px;
+    padding-bottom: 28px;
+  }
+
+  .thankyou-content {
+    padding-top: 12px;
+  }
+
+  .thankyou-steps {
+    grid-template-columns: 1fr;
+    width: min(100%, 420px);
+  }
+
+  .thankyou-step {
+    min-height: 0;
+    margin-bottom: 8px;
+  }
+
+  .thankyou-step p {
+    max-width: 260px;
+  }
+
+  .thankyou-divider {
+    margin-top: 26px;
+    margin-bottom: 18px;
+  }
+
+  .thankyou-cta {
+    width: 100%;
+  }
+}

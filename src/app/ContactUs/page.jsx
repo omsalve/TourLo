@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Threads from "../../../reactbitscomp/Backgrounds/DotGrid/Threads";
+import ThankYouPage from "../components/ThankYouPage";
 
 export default function ContactUs() {
   const [fullName, setFullName] = useState("");
@@ -13,10 +14,25 @@ export default function ContactUs() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
+  const [showThankYou, setShowThankYou] = useState(() =>
+    typeof window !== "undefined" && window.location.hash === "#contact-us/thankyou"
+  );
+
+  useEffect(() => {
+    const isThankYouHash = window.location.hash === "#contact-us/thankyou";
+    setShowThankYou(isThankYouHash);
+
+    const handleHashChange = () => {
+      setShowThankYou(window.location.hash === "#contact-us/thankyou");
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setResponseMessage(""); // Clear previous response message
+    setResponseMessage("");
 
     const nextErrors = {};
     if (!fullName.trim()) nextErrors.fullName = "Full name is required.";
@@ -41,12 +57,13 @@ export default function ContactUs() {
 
       if (res.ok) {
         setResponseMessage("Your message was sent successfully! We'll be in touch soon.");
-        // Clear the form
         setFullName("");
         setEmail("");
         setPhone("");
         setMessage("");
         setErrors({});
+        setShowThankYou(true);
+        window.location.hash = "#contact-us/thankyou";
       } else {
         setResponseMessage(data.message || "Something went wrong. Please try again later.");
       }
@@ -58,16 +75,16 @@ export default function ContactUs() {
     }
   };
 
+  if (showThankYou) {
+    return <ThankYouPage />;
+  }
+
   const inputBase =
     "w-full p-3 rounded-lg bg-black/40 text-white focus:outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-white/60 transition";
   const errorRing = "ring-red-500/60 focus:ring-red-400";
 
   return (
-    // Root becomes the positioning context for the background
-    // REMOVED bg-black from here
     <div className="relative min-h-screen flex flex-col">
-      {/* Background layer: fills the entire page behind content */}
-      {/* ADDED bg-black here */}
       <div className="absolute inset-0 -z-10 bg-black">
         <Threads
           amplitude={1}
@@ -83,9 +100,7 @@ export default function ContactUs() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="flex flex-col min-h-screen"
       >
-        {/* Top Section */}
         <div className="flex-1 bg-transparent flex flex-col px-8 py-6">
-          {/* Logo Top-Left */}
           <div className="flex justify-start">
             <Image
               src="/images/logos/logo.png"
@@ -97,7 +112,6 @@ export default function ContactUs() {
             />
           </div>
 
-          {/* Content Centered */}
           <div className="flex-1 flex flex-col items-center justify-center text-center">
             <h1 className="text-4xl font-bold text-white mb-4">
               Let’s Talk <span className="bg-gradient-to-r from-cyan-500 to-cyan-300 bg-clip-text text-transparent">Real Estate Innovation</span>
@@ -110,7 +124,6 @@ export default function ContactUs() {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="flex-1 bg-transparent flex items-center justify-center px-4">
           <form
             onSubmit={handleSubmit}
@@ -123,7 +136,6 @@ export default function ContactUs() {
               p-8 shadow-[0_8px_40px_rgba(0,0,0,0.2)]
             "
           >
-            {/* Full Name (full width) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="col-span-1 md:col-span-2">
                 <label htmlFor="fullName" className="block text-white mb-2">
@@ -150,7 +162,6 @@ export default function ContactUs() {
               </div>
             </div>
 
-            {/* Email + Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label htmlFor="email" className="block text-white mb-2">
@@ -189,7 +200,6 @@ export default function ContactUs() {
               </div>
             </div>
 
-            {/* Message */}
             <div className="mb-5">
               <label htmlFor="message" className="block text-white mb-2">
                 Message
@@ -204,7 +214,6 @@ export default function ContactUs() {
               />
             </div>
 
-            {/* Response Message */}
             {responseMessage && (
               <p
                 className={`text-center mb-4 ${
