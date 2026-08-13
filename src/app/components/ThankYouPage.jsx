@@ -160,7 +160,7 @@ export default function ThankYouPage() {
           <div className="thankyou-support">
             <p className="thankyou-support-title">Need immediate assistance?</p>
             <p>
-              Email us at <a href="mailto:hello@tourlo.com">hello@tourlo.com</a> or call <a href="tel:+919876543210">+91 98765 43210</a>
+              Email us at <a href="mailto:connect@tourlo.in">connect@tourlo.in</a> or call <a href="tel:+91 98333 88717">+91 98333 88717</a>
             </p>
           </div>
 
