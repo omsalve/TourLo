@@ -65,36 +65,6 @@ function TeamIcon() {
   );
 }
 
-function InstagramIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="thankyou-social-icon"
-    >
-      <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
-      <circle cx="12" cy="12" r="4.6" />
-      <circle cx="17.15" cy="6.85" r="1.05" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function LinkedInIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="thankyou-social-icon"
-    >
-      <rect x="2.5" y="2.5" width="19" height="19" rx="3.5" />
-      <line x1="7.3" y1="10.2" x2="7.3" y2="17" />
-      <circle cx="7.3" cy="6.9" r="0.9" fill="currentColor" stroke="none" />
-      <path d="M11.4 17v-4.1c0-1.7 1-2.6 2.4-2.6s2.2.9 2.2 2.6V17" />
-      <line x1="11.4" y1="10.2" x2="11.4" y2="17" />
-    </svg>
-  );
-}
-
 function BuildIcon() {
   return (
     <svg viewBox="0 0 32 22" aria-hidden="true" className="thankyou-step-icon">
@@ -202,7 +172,13 @@ export default function ThankYouPage() {
               className="thankyou-social"
               aria-label="TourLo on Instagram"
             >
-              <InstagramIcon />
+              <Image
+                src="/images/logos/instagramlogo.png"
+                alt="Instagram"
+                width={24}
+                height={24}
+                className="thankyou-social-logo"
+              />
               <span className="thankyou-social-handle">@tourlo_india</span>
             </a>
 
@@ -213,7 +189,13 @@ export default function ThankYouPage() {
               className="thankyou-social"
               aria-label="TourLo on LinkedIn"
             >
-              <LinkedInIcon />
+              <Image
+                src="/images/logos/linkedinlogo.png"
+                alt="LinkedIn"
+                width={24}
+                height={24}
+                className="thankyou-social-logo"
+              />
               <span className="thankyou-social-handle">@tourlo_india</span>
             </a>
           </div>
